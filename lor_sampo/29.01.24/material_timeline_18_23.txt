@@ -1,0 +1,150 @@
+#pragma once
+//SAMPO-main/sampo/scheduler/timeline - 
+#include <map>
+#include <iostream>
+#include "landscape.h"
+#include "time.h"
+
+using namespace std;
+
+class SupplyTimeline {
+public:
+	map<string, int> _capasity;
+	map<string, map<string, int>> _resource_sources;
+
+public:
+	SupplyTimeline(LandscapeConfiguration landscape_config) {
+		//map<string, >
+		
+		/*for (auto landscape : landscape_config.get_all_resources()) {
+			_capasity[landscape.id] = landscape._count;
+			for (auto res : )
+		}*/
+
+
+	}
+
+	pair<MaterialDelivery, Time> supply_resources(string work_id, Time deadline, vector< Material> materials, bool simulate, Time min_supply_start_time) {
+		min_supply_start_time = Time(0);
+
+	}
+	string _find_best_supply(string material, int count, Time deadline) {
+		if (this->_resource_sources.find(material) == this->_resource_sources.end()) {
+			cout << "Schedule can not be built. No available resource sources with '" << material << "' material" << endl;
+			return;
+		}
+		vector<string> depots;
+		//const string depot_id;
+		int depotCount;
+		for (auto& depot_el : this->_resource_sources[material]) {
+			if (depot_el.second >= count) {
+				depots.push_back(depot_el.first);
+			}
+		}
+
+		if (depots.empty()) {
+			cout << "Schedule can not be built. No one supplier has enough '" << material <<"' material" << endl;
+			return;
+		}
+	}
+	void append_in_material_delivery_list(Time time, int count, vector<pair<Time, int>> delivery_list, bool simulate, int need_count)
+	{
+		if (!simulate) {
+			if (count > need_count)
+				count = need_count;
+			delivery_list.push_back(make_pair(time, count));
+		}
+	}
+	void update_material_timeline_and_res_sources(ExtendedSortedList timeline, map<string, int> mat_sources)
+	{
+
+	}
+
+
+
+	//void append_in_material_delivery_list(Time time, int count, vector<)
+	pair< MaterialDelivery, Time> supply_resources(string work_id, Time deadline,
+		vector<Material> materials, bool simulate, Time min_supply_start_time = Time(0)) {
+		//assert min_supply_start_time <= deadline;
+		if (min_supply_start_time <= deadline)
+			exit(1);
+		MaterialDelivery delivery(work_id);
+		Time min_work_start_time = deadline;
+
+		for (Material material : materials) {
+			if (material.count == 0)
+				continue;
+			map<string, int> material_sources = this->_resource_sources[material.name];
+
+		}
+		//return 
+	}
+
+//#include <cassert>
+//#include <string>
+//#include <vector>
+//#include <map>
+//#include <algorithm>
+//#include <utility>
+//
+//    class Time {
+//        // Time class implementation should be provided
+//    };
+//
+//    class Material {
+//    public:
+//        std::string name;
+//        int count;
+//        // Material class implementation should be provided
+//    };
+//
+//    class MaterialDelivery {
+//    public:
+//        explicit MaterialDelivery(const std::string& work_id) {
+//            // MaterialDelivery constructor implementation should be provided
+//        }
+//        // MaterialDelivery class implementation should be provided
+//    };
+//
+//    class YourClassName { // Replace with the actual class name
+//        // Other members and functions of the class should be provided
+//
+//        std::pair<MaterialDelivery, Time> supply_resources(const std::string& work_id, const Time& deadline, const std::vector<Material>& materials, bool simulate, const Time& min_supply_start_time = Time(0)) {
+//            assert(min_supply_start_time <= deadline);
+//            MaterialDelivery delivery(work_id);
+//            Time min_work_start_time = deadline;
+//            for (const auto& material : materials) {
+//                if (material.count == 0) {
+//                    continue;
+//                }
+//                auto material_sources = _resource_sources[material.name];
+//                auto depot = _find_best_supply(material.name, material.count, deadline);
+//                auto& material_timeline = _timeline[depot];
+//                auto capacity = _capacity[depot];
+//                int need_count = material.count;
+//                auto idx_base = std::upper_bound(material_timeline.begin(), material_timeline.end(), deadline) - material_timeline.begin() - 1;
+//                int idx_left = idx_base;
+//                Time cur_time = deadline - Time(1); // Assuming Time supports operator-(int)
+//                std::vector<MaterialDelivery> material_delivery_list;
+//                if (simulate) {
+//                    material_delivery_list.clear();
+//                }
+//                else {
+//                    // If simulate is false, material_delivery_list should not be used
+//                }
+//                bool going_right = false;
+//                // The rest of the logic should be implemented here
+//            }
+//            // Return the appropriate pair
+//            return std::make_pair(delivery, min_work_start_time);
+//        }
+//
+//    private:
+//        std::map<std::string, std::vector<std::string>> _resource_sources;
+//        std::map<std::string, std::vector<Time>> _timeline;
+//        std::map<std::string, int> _capacity;
+//        // Other private members and functions should be provided
+//    };
+
+
+};
