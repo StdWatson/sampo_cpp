@@ -13,13 +13,16 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Файлы заголовков\schemas">
+      <UniqueIdentifier>{eb5adf42-d0b7-4a60-8d70-64fa591651f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\timeline">
+      <UniqueIdentifier>{90b80fc5-588d-49f2-a2aa-dce3bff0d368}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="graph.h">
-      <Filter>Файлы заголовков</Filter>
     </ClCompile>
     <ClCompile Include="time.cpp">
       <Filter>Файлы ресурсов</Filter>
@@ -27,64 +30,73 @@
     <ClCompile Include="Time_test.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
+    <ClCompile Include="graph.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClCompile>
     <ClCompile Include="interval.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClCompile>
     <ClCompile Include="resources.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="time.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="works.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="identifiable.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="contractor.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Time_test.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="identifiable_test.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="works_test.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="interval_test.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="resources_test.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
     <ClInclude Include="contractor_test.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
-    <ClInclude Include="just_in_time_timeline.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="identifiable.h">
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
-    <ClInclude Include="types.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="identifiable_test.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="interval_test.h">
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
     <ClInclude Include="landscape.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
-    <ClInclude Include="material_timeline.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="sorted_list.h">
-      <Filter>Файлы заголовков</Filter>
+    <ClInclude Include="resources_test.h">
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
     <ClInclude Include="scheduled_work.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="sheduler_spec.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="sorted_list.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
     <ClInclude Include="time_estimator.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="Time_test.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="works.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="works_test.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="just_in_time_timeline.h">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="material_timeline.h">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
+    <ClInclude Include="kek\contractor.h">
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

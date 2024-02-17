@@ -13,7 +13,7 @@ int test_Contractor(void) {
 	Worker w1(w_id[0], w_name[0], w_count_1, w_con_id[0], inter1), w2(w_id[1], w_name[1], w_count_1, w_con_id[1], inter2);
 	vector<Worker*> w = { &w1, &w2 };
 	Contractor c1(w);
-	c1.id = "idi_kek";
+	c1.id = "idi_kek";	
 
 	if (c1.get_id() != c1.id) {
 		cout << "string contractor id error\t";

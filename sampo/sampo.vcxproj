@@ -141,10 +141,12 @@
     <ClInclude Include="identifiable_test.h" />
     <ClInclude Include="interval_test.h" />
     <ClInclude Include="just_in_time_timeline.h" />
+    <ClInclude Include="kek\contractor.h" />
     <ClInclude Include="landscape.h" />
     <ClInclude Include="material_timeline.h" />
     <ClInclude Include="resources_test.h" />
     <ClInclude Include="scheduled_work.h" />
+    <ClInclude Include="sheduler_spec.h" />
     <ClInclude Include="sorted_list.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="time_estimator.h" />

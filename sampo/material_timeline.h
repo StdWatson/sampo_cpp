@@ -15,6 +15,7 @@ public:
 	map<string, int> _capacity = {};
 	vector<pair<Time, int>> material_delivery_list = {};
 public:
+
 	SupplyTimeline(LandscapeConfiguration landscape_config) {
 		//map<string, >
 

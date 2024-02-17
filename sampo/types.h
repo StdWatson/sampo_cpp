@@ -3,7 +3,8 @@
 #include <string>
 
 std::string ContractorName;
-std::string WorkerName;
+//std::string WorkerName;
+typedef std::string WorkerName;
 
 class EventType {
 private:
