@@ -154,6 +154,8 @@
     <ClInclude Include="types.h" />
     <ClInclude Include="works.h" />
     <ClInclude Include="works_test.h" />
+    <ClInclude Include="zones.h" />
+    <ClInclude Include="zone_timeline.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

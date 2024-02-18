@@ -98,5 +98,11 @@
     <ClInclude Include="kek\contractor.h">
       <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
+    <ClInclude Include="zone_timeline.h">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="zones.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
