@@ -107,5 +107,8 @@
     <ClInclude Include="requirements.h">
       <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
+    <ClInclude Include="helping_fitch.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

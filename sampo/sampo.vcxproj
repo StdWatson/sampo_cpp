@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClInclude Include="contractor.h" />
     <ClInclude Include="contractor_test.h" />
+    <ClInclude Include="helping_fitch.h" />
     <ClInclude Include="identifiable.h" />
     <ClInclude Include="identifiable_test.h" />
     <ClInclude Include="interval_test.h" />

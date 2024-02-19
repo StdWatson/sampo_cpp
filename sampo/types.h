@@ -7,7 +7,8 @@ std::string ContractorName;
 typedef std::string WorkerName;
 
 class EventType {
-private:
+//private:
+public:
 	int INITIAL = -1;
 	int START = 0;
 	int END = 1;
@@ -28,7 +29,8 @@ class ScheduleEvent : public EventType {
 public:
 	int seq_id;
 	EventType event_type;
-	double Time;	//time : Time
+	//double Time;	//time : Time
+	Time time;
 	//swork: Optional['ScheduledWork']
 	int available_workers_count;
 };
