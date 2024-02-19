@@ -33,3 +33,10 @@ public:
 public:
 	//change_cost
 };
+class ZoneTransition {
+	string name;
+	int from_status;
+	int	to_status;
+	Time start_time;
+	Time end_time;
+};

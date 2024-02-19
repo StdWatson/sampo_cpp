@@ -174,4 +174,29 @@ public:
 
 		return 1;
 	}
+
+	vector< ZoneTransition> update_timeline(int index, vector< Zone> zones, Time start_time, Time exec_time) {
+		vector<ZoneTransition> sworks;
+
+		for (auto zone : zones) {
+			vector<ScheduleEvent> state = _timeline[zone.name];
+			int start_idx = state.bisect_right(start_time);
+			int start_status = state[start_idx - 1].available_workers_count;
+
+			_validate(start_time, exec_time, state, zone.status);
+			bool change_cost = _config.time_costs[start_status, zone.status] == 0 ? 1 : 0;
+
+			EventType eventtype;
+
+			state.push_back(ScheduleEvent(index, eventtype.START, start_time - change_cost, 0, zone.status));
+			state.push_back(ScheduleEvent(index, eventtype.END, start_time - change_cost + exec_time, 0, zone.status));
+
+			if ((start_status != zone.status) && (zone.status != 0)) {
+				string _name = "Access card " + zone.name + " status: " + start_status + " -> " + zone.status;
+				sworks.push_back(ZoneTransition(_name, start_status, zone.status, start_time - change_cost, start_time));
+			}
+		}
+
+		return sworks;
+	}
 };
