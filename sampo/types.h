@@ -24,7 +24,8 @@ private:
 };
 
 class ScheduleEvent : public EventType {
-private:
+//private:
+public:
 	int seq_id;
 	EventType event_type;
 	double Time;	//time : Time

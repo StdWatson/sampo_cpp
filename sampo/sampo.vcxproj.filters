@@ -104,5 +104,8 @@
     <ClInclude Include="zones.h">
       <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
+    <ClInclude Include="requirements.h">
+      <Filter>Файлы заголовков\schemas</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

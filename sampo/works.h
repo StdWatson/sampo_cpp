@@ -3,32 +3,33 @@
 #include <vector>
 #include "identifiable.h"
 #include "time.h"
+#include "requirements.h"
 
 using namespace std;
 
-class WorkerReq {
-public:
-    string kind;
-    Time volume;
-    int min_count;
-    int max_count;
-
-    explicit WorkerReq(string& kind, Time volume, int min_count, int max_count)
-        : kind(kind), volume(volume), min_count(min_count), max_count(max_count) {}
-
-    string get_kind() {
-        return kind;
-    }
-    Time get_volume() {
-        return volume;
-    }
-    int get_min_count() {
-        return min_count;
-    }
-    int get_max_count() {
-        return max_count;
-    }
-};
+//class WorkerReq {
+//public:
+//    string kind;
+//    Time volume;
+//    int min_count;
+//    int max_count;
+//
+//    explicit WorkerReq(string& kind, Time volume, int min_count, int max_count)
+//        : kind(kind), volume(volume), min_count(min_count), max_count(max_count) {}
+//
+//    string get_kind() {
+//        return kind;
+//    }
+//    Time get_volume() {
+//        return volume;
+//    }
+//    int get_min_count() {
+//        return min_count;
+//    }
+//    int get_max_count() {
+//        return max_count;
+//    }
+//};
 class WorkUnit : public Identifiable {
 public:
     vector<WorkerReq> worker_reqs;

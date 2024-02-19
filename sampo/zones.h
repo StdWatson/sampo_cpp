@@ -6,7 +6,18 @@
 
 using namespace std;
 
+class Zone {
+public:
+	string name;
+	int status;
+
+public:
+	//explicit Zone(string name, int status) : name(name), status(status) {};
+	Zone(string name, int status) : name(name), status(status) {};
+};
 class DefaultZoneStatuses {
+public:
+
 	int statuses_available() {
 		return 3;
 	}
@@ -18,7 +29,7 @@ class ZoneConfiguration {
 public:
 	map<string, int> start_statuses;
 	vector<int> time_costs;
-	int statuses;
+	DefaultZoneStatuses statuses;
 public:
 	//change_cost
 };
