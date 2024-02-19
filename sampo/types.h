@@ -33,4 +33,6 @@ public:
 	Time time;
 	//swork: Optional['ScheduledWork']
 	int available_workers_count;
+public:
+	ScheduleEvent() {};
 };

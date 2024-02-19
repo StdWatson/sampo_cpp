@@ -17,7 +17,8 @@ using namespace std;
 class ZoneTimeline {
 public:
 	ZoneConfiguration _config;
-	map<string, int> _timeline;
+	//map<string, int> _timeline;
+	map<string, vector<ScheduleEvent>> _timeline;
 public:
 	ZoneTimeline(ZoneConfiguration _config) {
 
@@ -40,7 +41,31 @@ public:
 
 		return (starts_count == ends_count);
 	}
+	int _validate(Time start_time, Time exec_time, vector<ScheduleEvent> state, int required_status) {
+		int start_idx = state.bisect_right(start_time);
+		int end_idx = state.bisect_right(start_time + exec_time);
+		int start_status = state[start_idx - 1].available_workers_count;
 
+		ScheduleEvent event;
+		for (int i = start_idx; i < end_idx; i++) {
+			if (!_config.statuses.match_status(event.available_workers_count, required_status)) {
+				cout << "we change the between statuses" << endl;
+				return 0;
+			}
+		}
+
+		EventType eventtype;
+		if ((state[start_idx - 1].event_type == eventtype.END) ||
+			((state[start_idx - 1].event_type == eventtype.START) &&
+				_config.statuses.match_status(start_status, required_status)) ||
+			(state[start_idx - 1].event_type == eventtype.INITIAL)) {
+			cout << state[start_idx - 1].time << state[start_idx - 1].event_type << required_status << start_status << endl;
+
+			return 0;
+		}
+
+		return 1;
+	}
 	Time find_min_start_time(vector< ZoneReq> zones, Time parent_time, Time exec_time) {
 		Time start = parent_time;
 		vector<ZoneReq> scheduled_wreqs = {};
@@ -97,9 +122,56 @@ public:
 				}
 				else {
 					current_start_time += _config.time_costs[current_start_status, required_status];
-					end_idx = state.bisect_right(current_start_time + exec_time)
+					end_idx = state.bisect_right(current_start_time + exec_time);
 				}
 			}
+			bool not_compatible_status_found = 0;
+
+			for(int idx = end_idx - 1; idx > -1; idx = (current_start_idx - 1)) {
+				if (!_match_status(state[idx].available_workers_count, required_status)) {
+					current_start_idx = max(idx, current_start_idx) + 1;
+					not_compatible_status_found = 1;
+					break;
+				}
+			}
+			if (!not_compatible_status_found)
+				break;
+			if (current_start_idx >= state.size()) {
+				current_start_time = max(parent_time, (state[-1].time + 1));
+				break;
+			}
+			current_start_time = state[current_start_idx].time;
 		}
+		_validate(current_start_time, exec_time, state, required_status);
+
+		return current_start_time;
+	}
+	bool can_schedule_at_the_moment(vector< ZoneReq> zones, Time start_time, Time exec_time) {
+		for (auto zone : zones) {
+			vector<ScheduleEvent> state = _timeline[zone.kind];
+			int start_idx = state.bisect_right(start_time);
+			int end_idx = state.bisect_right(start_time + exec_time);
+			int start_status = state[start_idx - 1].available_workers_count;
+
+			if (!_match_status(start_status, zone.required_status)) {
+				int change_cost = _config.time_costs[start_status, zone.required_status];
+				int new_start_idx = state.bisect_right(start_time - change_cost);
+
+				if (new_start_idx != start_idx)
+					return 0;
+				if (!_is_inside_interval(state, start_idx))
+					return 0;
+			}
+
+			ScheduleEvent event;
+			for (int idx = start_idx; idx < end_idx; idx++) {
+				event = state[idx];
+
+				if (!_match_status(event.available_workers_count, zone.required_status))
+					return 0;
+			}
+		}
+
+		return 1;
 	}
 };
