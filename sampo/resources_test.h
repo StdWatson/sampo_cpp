@@ -10,7 +10,7 @@ int test_Worker(void) {
 	string w_id = "fd", w_name = "John", w_con_id = "kek";
 	int w_count = 3;
 	IntervalGaussian inter1(5, 2, min_val, max_val);
-	Worker w1(w_id, w_name, w_count, w_con_id, inter2);
+	Worker w1(w_id, w_name, w_count, max_val, w_con_id, inter2);
 
 	if (w1.get_id() != w_id) {
 		cout << "string id error\t";

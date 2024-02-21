@@ -1,10 +1,14 @@
 #pragma once
 /*sheduler/shemas/types - набор нужных типов*/
 #include <string>
+#include <vector>
+
+#include "time.h"
 
 std::string ContractorName;
 //std::string WorkerName;
 typedef std::string WorkerName;
+typedef std::pair
 
 class EventType {
 //private:
@@ -34,5 +38,10 @@ public:
 	//swork: Optional['ScheduledWork']
 	int available_workers_count;
 public:
-	ScheduleEvent() {};
+	explicit ScheduleEvent(int seq_id, EventType event_type, Time time, int available_workers_count) : seq_id(seq_id),
+		event_type(event_type),	time(time = Time::Time(0)), available_workers_count(available_workers_count) {
+	/*	time = Time(0);
+		this->time = time;*/
+	}
+
 };

@@ -2,8 +2,10 @@
 //SAMPO-main/sampo/scheduler/timeline - 
 #include <map>
 #include <iostream>
+
 #include "landscape.h"
 #include "time.h"
+#include "helping_fitch.h"
 
 using namespace std;
 
@@ -40,6 +42,7 @@ public:
 			}
 		}
 	}*/
+	
 	string _find_best_supply(string material, int count, Time deadline)
 	{
 		if (this->_resource_sources.find(material) == this->_resource_sources.end()) {
@@ -129,12 +132,12 @@ public:
 							append_in_material_delivery_list(cur_time, time_left_capacity, material_delivery_list, simulate, need_count);
 							need_count -= time_left_capacity;
 						}
-						cur_time += 1;
+						cur_time = cur_time + 1;
 					}
 					while ((need_count > 0) && (cur_time < time_right)) {
 						append_in_material_delivery_list(cur_time, capacity, material_delivery_list, simulate, need_count);
 						need_count -= capacity;
-						cur_time += 1;
+						cur_time = cur_time + 1;
 					}
 					if (need_count > 0) {
 						idx_left += 1;
@@ -144,14 +147,14 @@ public:
 					while ((need_count > 0) && (time_left < cur_time) && (min_supply_start_time <= cur_time)) {
 						append_in_material_delivery_list(cur_time, capacity, material_delivery_list, simulate, need_count);
 						need_count -= capacity;
-						cur_time -= 1;
+						cur_time = cur_time - 1;
 					}
 					if ((need_count > 0) && (cur_time == time_left) && (min_supply_start_time <= cur_time)) {
 						int time_left_capacity = material_timeline[idx_left][1];
 						if (time_left_capacity) {
 							append_in_material_delivery_list(cur_time, time_left_capacity, material_delivery_list, simulate, need_count);
 							need_count -= time_left_capacity;
-							cur_time -= 1;
+							cur_time = cur_time - 1;
 						}
 
 					}
@@ -168,12 +171,32 @@ public:
 
 			if (!simulate) {
 				update_material_timeline_and_res_sources(material_timeline, material_sources);
-				delivery.add_deliveries(material.name, material_delivery_list)
+				delivery.add_deliveries(material.name, material_delivery_list);
 			}
 
 			min_work_start_time = max(min_work_start_time, cur_time);
-
-
 		}
+		pair< MaterialDelivery, Time> rez(delivery, min_work_start_time);
+
+		return rez;
+	}
+	Time find_min_material_time(string id, Time start_time, vector< Material> materials, int batch_size) {
+		int sum_materials = 0;
+
+		for (auto material : materials) {
+			sum_materials += material.count;
+		}
+
+		int ratio = sum_materials / batch_size;
+		int batches = max(1, ceill(ratio));
+
+		vector<Material> first_batch;
+		for (auto material : materials) {
+			material.with_count(material.count / batches);
+			first_batch.push_back(material);// (material.with_count(material.count / batches);
+		}
+		pair< MaterialDelivery, Time> rez = supply_resources(id, start_time, first_batch, 1);
+
+		return rez.second();
 	}
 };

@@ -45,3 +45,27 @@ public:
         return Z;
     }
 };
+class EquipmentReq {
+public:
+    string kind;
+    int count;
+    string name;
+};
+class MaterialReq {
+public:
+    string kind;
+    int count;
+    string name;
+public:
+    explicit MaterialReq(string name = "") {}
+    //Material(string kind, int count, name = ""){}
+    Material material() {
+        Material rez(name, kind, count);
+        return rez;
+    }
+};
+class ConstructionObjectReq {
+    string kind;
+    int count;
+    string name;
+};

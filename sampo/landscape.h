@@ -51,9 +51,9 @@ class LandscapeConfiguration {
 public:
 	vector<Road> roads;
 	vector<ResourceHolder> holders;
-
+	ZoneConfiguration zone_config;
 public:
-	LandscapeConfiguration(vector<Road> roads = {}, vector<ResourceHolder> holders = {})
+	LandscapeConfiguration(vector<Road> roads = {}, vector<ResourceHolder> holders = {}, ZoneConfiguration zone_config())
 		: roads(roads), holders(holders) {};
 
 	vector<ResourceSupply> get_all_resources() {

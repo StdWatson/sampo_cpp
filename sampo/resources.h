@@ -5,8 +5,10 @@
 #include <utility>
 #include <vector>
 #include <random>
+
 #include "interval.h"
 #include "identifiable.h"
+#include "types.h"
 
 using namespace std;
 
@@ -71,18 +73,17 @@ public:
 	}
 };
 
-class Worker : public Identifiable {
+//class Worker : public Identifiable {
+class Worker : public Resource {
     string id;
     string name;
     int count;
 	int cost;
     string contractor_id;
     IntervalGaussian productivity;
-
 public:
     Worker(string id, string name, int count, int cost, string contractorId, const IntervalGaussian& productivity)
-        : id(std::move(id)), name(std::move(name)), count(count), cost(cost),
-        contractor_id(std::move(contractorId)), productivity(productivity) {}
+        : Resource(std::move(id), std::move(name), count, std::move(contractorId)), cost(cost), productivity(productivity) {}
 
 	std::string get_id() {
 		return id;
@@ -98,6 +99,9 @@ public:
 	}
 	std::string get_contractor_id() {
 		return contractor_id;
+	}
+	AgentId get_agent_id() {
+		AgentId agentid(;
 	}
 	IntervalGaussian get_productivity() {
 		return productivity;

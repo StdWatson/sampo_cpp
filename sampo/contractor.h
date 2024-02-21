@@ -8,7 +8,7 @@
 
 //using namespace std;
 
-typedef std::map<std::string, std::map<std::string, Worker>> WorkerContractorPool;
+typedef std::map<std::string, std::vector<std::pair<std::string, Worker>>> WorkerContractorPool;
                                                      
 class Contractor : public Identifiable {
 public:

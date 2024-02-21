@@ -108,6 +108,9 @@ public:
     WorkUnit* getwork_unit() {
         return work_unit;
     }
+    /*WorkUnit work_unit() {
+        return work_unit;
+    }*/
 
     string id() {
         return getwork_unit()->id;
