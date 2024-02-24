@@ -32,7 +32,8 @@ class ScheduleEvent : public EventType {
 //private:
 public:
 	int seq_id;
-	EventType event_type;
+	//EventType event_type;
+	int event_type;
 	//double Time;	//time : Time
 	Time time;
 	//swork: Optional['ScheduledWork']
@@ -40,10 +41,15 @@ public:
 public:
 	explicit ScheduleEvent(Time time = Time(0)) : time(time) {
 	}
-	ScheduleEvent(int seq_id, EventType event_type, Time time, int available_workers_count) : seq_id(seq_id),
-		event_type(event_type),	time(time = Time::Time(0)), available_workers_count(available_workers_count) {
-	/*	time = Time(0);
-		this->time = time;*/
+	//ScheduleEvent(int seq_id, EventType event_type, Time time, int available_workers_count) : seq_id(seq_id),
+	//	event_type(event_type),	time(time = Time::Time(0)), available_workers_count(available_workers_count) {
+	///*	time = Time(0);
+	//	this->time = time;*/
+	//}
+	ScheduleEvent(int seq_id, int event_type, Time time, int available_workers_count) : seq_id(seq_id),
+		event_type(event_type), time(time = Time::Time(0)), available_workers_count(available_workers_count) {
+		/*	time = Time(0);
+			this->time = time;*/
 	}
 
 };

@@ -90,7 +90,7 @@ public:
     vector<GraphNode*> parents() {
         auto parents = vector<GraphNode*>();
         for (GraphEdge& parent : parent_edges) {
-            parents.push_back(parent.start);
+            parents.push_back(&parent.start);
         }
         return parents;
     }
@@ -98,7 +98,7 @@ public:
     vector<GraphNode*> children() {
         auto children = vector<GraphNode*>();
         for (GraphEdge& child : children_edges) {
-            children.push_back(child.start);
+            children.push_back(&child.start);
         }
         return children;
     }
@@ -132,7 +132,16 @@ public:
         }
         return chain;
     }
-
+    /*vector<GraphNode> get_inseparable_chain_with_self() {
+        auto chain = vector<GraphNode>();
+        chain.push_back(this);
+        auto child = inseparableSon();
+        if (child) {
+            auto subChain = child->getInseparableChainWithSelf();
+            chain.insert(chain.end(), subChain.begin(), subChain.end());
+        }
+        return chain;
+    }*/
     Time min_start_time(map< GraphNode, ScheduledWork> node2swork) {
         vector<GraphEdge> edges = edges_to();
 

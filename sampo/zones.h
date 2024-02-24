@@ -34,9 +34,14 @@ public:
 	//change_cost
 };
 class ZoneTransition {
+public:
 	string name;
 	int from_status;
 	int	to_status;
 	Time start_time;
 	Time end_time;
+public:
+	ZoneTransition(string name, int from_status, int to_status, Time start_time, Time end_time) : name(name), from_status(from_status),
+																								to_status(to_status), start_time(start_time),
+																								end_time(end_time) {}
 };

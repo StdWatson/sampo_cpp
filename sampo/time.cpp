@@ -110,3 +110,11 @@ bool Time::operator==(Time& other) const {
 bool Time::operator==(int other) const {
     return this->value == other;
 }
+
+bool Time::operator!=(Time& other) const {
+    return this->value != other.value;
+}
+
+bool Time::operator!=(int other) const {
+    return this->value != other;
+}

@@ -188,13 +188,17 @@ public:
 			bool change_cost = _config.time_costs[start_status, zone.status] == 0 ? 1 : 0;
 
 			EventType eventtype;
+			/*ScheduleEvent evnt1 = ScheduleEvent(index, eventtype.START, start_time - change_cost, 0, zone.status);*/
+			ScheduleEvent evnt_start = ScheduleEvent(index, eventtype.START, start_time - change_cost, zone.status);
+			ScheduleEvent evnt_end = ScheduleEvent(index, eventtype.END, start_time - change_cost + exec_time, zone.status);
 
-			state.push_back(ScheduleEvent(index, eventtype.START, start_time - change_cost, 0, zone.status));
-			state.push_back(ScheduleEvent(index, eventtype.END, start_time - change_cost + exec_time, 0, zone.status));
+			state.push_back(evnt_start);
+			state.push_back(evnt_end);
 
 			if ((start_status != zone.status) && (zone.status != 0)) {
-				string _name = "Access card " + zone.name + " status: " + start_status + " -> " + zone.status;
-				sworks.push_back(ZoneTransition(_name, start_status, zone.status, start_time - change_cost, start_time));
+				string _name = "Access card " + zone.name + " status: " + to_string(start_status) + " -> " + to_string(zone.status);
+				ZoneTransition zone_lok = ZoneTransition(_name, start_status, zone.status, start_time - change_cost, start_time);
+				sworks.push_back(zone_lok);
 			}
 		}
 
