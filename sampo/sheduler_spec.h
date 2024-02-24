@@ -10,6 +10,7 @@
 using namespace std;
 
 class WorkSpec {
+public:
 	vector< WorkUnit> chain;
 	map<WorkerName, int> assigned_workers;
 	Time assigned_time;

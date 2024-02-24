@@ -86,7 +86,8 @@ public:
 
 	}
 	Time _find_earliest_time_slot(vector< ScheduleEvent> state, Time parent_time, Time exec_time, int required_status) {
-		Time current_start_time = current_start_time;
+		//Time current_start_time = current_start_time;
+		Time current_start_time = Time(0);
 		int current_start_idx = (state.size() / 2) - 1;
 		EventType eventtype;
 
@@ -105,12 +106,12 @@ public:
 
 			if (!(_match_status(current_start_status, required_status))) {
 				if (current_start_idx == (state.size() - 1)) {
-					current_start_time += max(0, (_config.time_costs[current_start_status, required_status] - (current_start_time - state[-1].Time)));
+					current_start_time = current_start_time + max(0, (_config.time_costs[current_start_status, required_status] - (current_start_time - state[-1].Time)));
 					break;
 				}
 				if ((state[current_start_idx].event_type == eventtype.START) && (_match_status(current_start_status, required_status))) {
 					current_start_idx += 1;
-					current_start_time += state[current_start_idx].time;
+					current_start_time = current_start_time + state[current_start_idx].time;
 					continue;
 				}
 				if (_is_inside_interval(state, current_start_idx)) {
@@ -121,7 +122,7 @@ public:
 					}
 				}
 				else {
-					current_start_time += _config.time_costs[current_start_status, required_status];
+					current_start_time = current_start_time + _config.time_costs[current_start_status, required_status];
 					end_idx = state.bisect_right(current_start_time + exec_time);
 				}
 			}
@@ -163,7 +164,7 @@ public:
 					return 0;
 			}
 
-			ScheduleEvent event;
+			ScheduleEvent event = ScheduleEvent();
 			for (int idx = start_idx; idx < end_idx; idx++) {
 				event = state[idx];
 

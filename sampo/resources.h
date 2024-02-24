@@ -75,6 +75,7 @@ public:
 
 //class Worker : public Identifiable {
 class Worker : public Resource {
+public:
     string id;
     string name;
     int count;

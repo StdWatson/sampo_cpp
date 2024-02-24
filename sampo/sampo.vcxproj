@@ -145,6 +145,7 @@
     <ClInclude Include="kek\contractor.h" />
     <ClInclude Include="landscape.h" />
     <ClInclude Include="material_timeline.h" />
+    <ClInclude Include="momentum_timeline.h" />
     <ClInclude Include="requirements.h" />
     <ClInclude Include="resources_test.h" />
     <ClInclude Include="scheduled_work.h" />
