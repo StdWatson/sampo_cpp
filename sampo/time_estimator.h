@@ -5,6 +5,8 @@
 #include <vector>
 
 #include "resources.h"
+#include "collections_util.h"
+
 
 using namespace std;
 
@@ -36,6 +38,13 @@ public:
 //
 //};
 
+float communication_coefficient(int groups_count, int max_groups) {
+	int n = groups_count;
+	int m = max_groups;
+
+	return 1 / ((6 * m * m) * (-2 * n * n * n + 3 * n * n + (6 * m * m - 1) * n));
+}
+
 class DefaultWorkEstimator {
 public:
 	bool _use_idle;
@@ -60,6 +69,45 @@ public:
 			resources[name] = rand.poisson(pow(work_volume, 0.5));
 		}
 		return resources;
+	}
+	float get_productivity_of_worker(Worker* worker, int max_groups = 0, string productivity_mode = "Static") {
+		return worker->get_productivity(productivity_mode) * communication_coefficient(worker->count, max_groups);
+	}
+	Time estimate_time(WorkUnit *work_unit, vector< Worker*> worker_list) {
+		if (worker_list.size() == 0)
+			return Time(0);
+		vector<Time> times = { Time(0) };
+		std::map<std::string, Worker*> name2worker = build_index(worker_list);
+
+		for (auto req : work_unit->worker_reqs) {
+			int worker_count = 0;
+			DefaultWorkEstimator def_est;
+
+			if (req.min_count == 0)
+				continue;
+			string name = req.get_kind();
+			Worker* worker = name2worker[name];
+
+			if (worker == NULL)
+				worker_count = 0;
+			else
+				worker_count = worker->count;
+			if (worker_count < req.get_min_count())
+				return Time::inf();
+			float productivity = def_est.get_productivity_of_worker(worker, req.max_count, _productivity_mode) / worker_count;
+
+			if (productivity == 0)
+				return Time::inf();
+			times.push_back(req.volume / productivity);
+		}
+		Time prev_time = times[0], max_time = Time(0);
+
+		for (auto ob_time : times) {
+			max_time = max(ob_time, prev_time);
+			prev_time = max_time;
+		}
+
+		return max(max_time, Time(0));
 	}
 
 };

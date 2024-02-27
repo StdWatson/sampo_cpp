@@ -135,6 +135,7 @@
     <ClCompile Include="Time_test.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collections_util.h" />
     <ClInclude Include="contractor.h" />
     <ClInclude Include="contractor_test.h" />
     <ClInclude Include="helping_fitch.h" />
@@ -142,7 +143,6 @@
     <ClInclude Include="identifiable_test.h" />
     <ClInclude Include="interval_test.h" />
     <ClInclude Include="just_in_time_timeline.h" />
-    <ClInclude Include="kek\contractor.h" />
     <ClInclude Include="landscape.h" />
     <ClInclude Include="material_timeline.h" />
     <ClInclude Include="momentum_timeline.h" />

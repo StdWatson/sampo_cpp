@@ -19,6 +19,9 @@
     <Filter Include="Файлы заголовков\timeline">
       <UniqueIdentifier>{90b80fc5-588d-49f2-a2aa-dce3bff0d368}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\utilities">
+      <UniqueIdentifier>{26812ac3-eb17-4c25-a83d-7b14c08a1d6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -95,9 +98,6 @@
     <ClInclude Include="types.h">
       <Filter>Файлы заголовков\schemas</Filter>
     </ClInclude>
-    <ClInclude Include="kek\contractor.h">
-      <Filter>Файлы заголовков\schemas</Filter>
-    </ClInclude>
     <ClInclude Include="zone_timeline.h">
       <Filter>Файлы заголовков\timeline</Filter>
     </ClInclude>
@@ -112,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="momentum_timeline.h">
       <Filter>Файлы заголовков\timeline</Filter>
+    </ClInclude>
+    <ClInclude Include="collections_util.h">
+      <Filter>Файлы заголовков\utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -37,7 +37,7 @@ public:
     /*string id;
     string name;*/
     //Identifiable idef;
-    vector<WorkerReq> worker_reqs;
+    vector<WorkerReq*> worker_reqs;
     vector< EquipmentReq> equipment_reqs;
     vector< MaterialReq> material_reqs;
     vector< ConstructionObjectReq> object_reqs;
@@ -81,7 +81,7 @@ public:
     /*WorkerReq get_worker_reqs_0() {
         return worker_reqs[0];
     }*/
-    vector<WorkerReq> get_worker_reqs() {
+    vector<WorkerReq*> get_worker_reqs() {
         return worker_reqs;
     }
     vector< Material> need_materials() {

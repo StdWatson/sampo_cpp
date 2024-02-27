@@ -18,6 +18,11 @@ public:
 	std::string Stohastic = "stohastic";
 };
 
+//enum WorkerProductivityMode {
+//	Static,
+//	Stohastic
+//};
+
 typedef struct {
 	std::string name;
 	std::string contractor_id;
@@ -83,8 +88,10 @@ public:
     string contractor_id;
     IntervalGaussian productivity;
 public:
-    Worker(string id, string name, int count, int cost, string contractorId, const IntervalGaussian& productivity)
-        : Resource(std::move(id), std::move(name), count, std::move(contractorId)), cost(cost), productivity(productivity) {}
+    Worker(string id, string name, int count, int cost, string contractorId, IntervalGaussian productivity)
+        : Resource(std::move(id), std::move(name), count, std::move(contractorId)), cost(cost) {
+		productivity = IntervalGaussian(1, 0, 1, 1);
+	}
 
 	std::string get_id() {
 		return id;
@@ -101,11 +108,15 @@ public:
 	std::string get_contractor_id() {
 		return contractor_id;
 	}
-	AgentId get_agent_id() {
+	/*AgentId get_agent_id() {
 		AgentId agentid(;
-	}
-	IntervalGaussian get_productivity() {
-		return productivity;
+	}*/
+	float get_productivity(std::string productivity_mode) {
+		WorkerProductivityMode _prod_mod;
+
+		if (productivity_mode == _prod_mod.Static)
+			return productivity.mean * this->count;
+		return productivity.randFloat() * this->count;
 	}
 };
 
