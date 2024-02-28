@@ -28,8 +28,8 @@ class GraphNode;
 
 class GraphEdge {
 public:
-    GraphNode start;
-    GraphNode finish;
+    GraphNode* start;
+    GraphNode* finish;
     float lag;
     EdgeType type;
 
@@ -40,9 +40,9 @@ public:
 class GraphNode {
 private:
     WorkUnit* work_unit;
-    vector<GraphEdge> parent_edges = vector<GraphEdge>();
+    vector<GraphEdge*> parent_edges = vector<GraphEdge*>();
     vector<GraphEdge> children_edges = vector<GraphEdge>();
-    vector< GraphEdge> _parent_edges = vector< GraphEdge>();
+    vector< GraphEdge*> _parent_edges = vector< GraphEdge*>();
 public:
     explicit GraphNode(WorkUnit* work_unit) : work_unit(work_unit) {};
 
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    vector< GraphEdge> edges_to() {
+    vector< GraphEdge*> edges_to() {
         return _parent_edges;
     }
 
@@ -79,7 +79,7 @@ public:
     }
 
     GraphNode* inseparableParent() {
-        for (GraphEdge& parent : parent_edges) {
+        for (GraphEdge parent : parent_edges) {
             if (parent.type == EdgeType::InseparableFinishStart) {
                 return parent.start;
             }
@@ -103,7 +103,7 @@ public:
         return children;
     }
 
-    vector<GraphEdge> edgesTo() {
+    vector<GraphEdge*> edgesTo() {
         return parent_edges;
     }
 
@@ -142,12 +142,12 @@ public:
         }
         return chain;
     }*/
-    Time min_start_time(map< GraphNode, ScheduledWork> node2swork) {
-        vector<GraphEdge> edges = edges_to();
+    Time min_start_time(map< GraphNode*, ScheduledWork> node2swork) {
+        vector<GraphEdge*> edges = edges_to();
 
         for (auto edge : edges) {
-            if (node2swork[edge.start] != NULL)
-                node2swork[edge.start].finish_time() + int(edge.lag);
+            if (node2swork[edge->start] != NULL)
+                node2swork[edge->start].finish_time() + int(edge->lag);
         }
 
         return Time(0);

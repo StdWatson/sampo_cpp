@@ -118,13 +118,25 @@ public:
 				start = max(found_start, start);
 			}
 			else {
-				queue.pop();
+				for (auto el : scheduled_wreqs) {
+					queue.push(el);
+				}
+				scheduled_wreqs.clear();
+				scheduled_wreqs.push_back(wreq);
+				start = max(found_start, start);
 			}
 
 		}
+
+		return start;
 	}
-	tuple<Time, Time, map<GraphNode, pair<Time, Time>>> find_min_start_time_with_additional(GraphNode* node, vector< Worker *> worker_team,
-		map< GraphNode, ScheduledWork> node2swork, WorkSpec spec, Time assigned_start_time = Time(0), Time assigned_parent_time = Time(0), DefaultWorkEstimator work_estimator) {
+	tuple<Time, Time, map<GraphNode*, pair<Time, Time>>> find_min_start_time_with_additional(GraphNode* node,
+																							vector< Worker *> worker_team,
+																							map< GraphNode*, ScheduledWork> node2swork,
+																							WorkSpec spec,
+																							Time assigned_start_time = Time(0),
+																							Time assigned_parent_time = Time(0),
+																							DefaultWorkEstimator work_estimator) {
 		
 		vector< GraphNode*> inseparable_chain = node->getInseparableChainWithSelf();
 		string contractor_id;
@@ -153,12 +165,12 @@ public:
 			else
 				work_estimator.estimate_time(chain_node->getwork_unit(), worker_team);
 			Time lag_req = nodes_max_parent_times[chain_node] - max_parent_time - exec_time;
-			Time lag = 0;
+			Time lag = Time(0);
 
 			if (lag_req > 0)
 				lag = lag_req;
 			else
-				lag = 0;
+				lag = Time(0);
 			Time lag = exec_times[chain_node].first;
 			Time node_exec_timeg = exec_times[chain_node].second;
 			Time time_tmp = (lag + node_exec_time);
@@ -172,15 +184,48 @@ public:
 			max_parent_time = max(max_parent_time, max_material_time);
 			max_parent_time = max(max_parent_time, max_zone_time);
 
-			tuple<Time, Time, map<GraphNode, pair<Time, Time>>> rez(max_parent_time, max_parent_time, exec_times);
+			//tuple<Time, Time, map<GraphNode*, pair<Time, Time>>> rez(max_parent_time, max_parent_time, exec_times);
+
+			//return rez;
+			return{ max_parent_time, max_parent_time, exec_times };
 		}
 		Time tmp = Time(0);
+		Time st = Time(0);
 		if (assigned_start_time != tmp)
-			Time st = assigned_start_time;
+			st = assigned_start_time;
 		else {
 			Time prev_st = max_parent_time;
-			Time start_time = _find_min_start_time(_timeline[contractor_id], )
-		}
+			Time start_time = _find_min_start_time(_timeline[contractor_id], inseparable_chain, spec, prev_st, exec_time, worker_team);
+			Time max_material_time = _material_timeline.find_min_material_time(node->id(),
+																			start_time,
+																			node->getwork_unit()->need_materials(),
+																			node->getwork_unit()->workground_size);
+			Time  max_zone_time = zone_timeline.find_min_start_time(node->getwork_unit()->zone_reqs, 
+																	max_material_time,
+																	exec_time);
+			st = max(max_material_time, max_zone_time);
+			st = max(st, start_time);
 
+			int j = 0;
+			while (st != prev_st) {
+				j++;
+
+				start_time = _find_min_start_time(_timeline[contractor_id], inseparable_chain, spec, st, exec_time, worker_team);
+				max_material_time = _material_timeline.find_min_material_time(node->id(),
+																				start_time,
+																				node->getwork_unit()->need_materials(),
+																				node->getwork_unit()->workground_size);
+				max_zone_time = zone_timeline.find_min_start_time(node->getwork_unit()->zone_reqs, start_time, exec_time);
+
+				prev_st = st;
+				st = max(max_material_time, max_zone_time);
+				st = max(st, start_time);
+			}
+		}
+		//tuple<Time, Time, map<GraphNode, pair<Time, Time>>> rez = { st, st + exec_time, exec_times };
+
+		return { st, st + exec_time, exec_times };
 	}
+
+	bool can_schedule_at_the_moment(){}
 };
