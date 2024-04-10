@@ -19,7 +19,7 @@ public:
 };
 
 //enum WorkerProductivityMode {
-//	Static,
+//	Static = "static",
 //	Stohastic
 //};
 
@@ -86,11 +86,11 @@ public:
     int count;
 	int cost;
     string contractor_id;
-    IntervalGaussian productivity;
+    IntervalGaussian productivity = IntervalGaussian::IntervalGaussian(1, 0, 1, 1);
 public:
     Worker(string id, string name, int count, int cost, string contractorId, IntervalGaussian productivity)
         : Resource(std::move(id), std::move(name), count, std::move(contractorId)), cost(cost) {
-		productivity = IntervalGaussian(1, 0, 1, 1);
+		//productivity = IntervalGaussian::IntervalGaussian(1, 0, 1, 1);
 	}
 
 	std::string get_id() {

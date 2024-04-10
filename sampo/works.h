@@ -39,9 +39,9 @@ public:
     //Identifiable idef;
     vector<WorkerReq*> worker_reqs;
     vector< EquipmentReq> equipment_reqs;
-    vector< MaterialReq> material_reqs;
+    vector< MaterialReq*> material_reqs;
     vector< ConstructionObjectReq> object_reqs;
-    vector< ZoneReq> zone_reqs;
+    vector< ZoneReq*> zone_reqs;
     string group;
     float volume;
     bool is_service_unit;
@@ -52,25 +52,27 @@ public:
 public:
     /*explicit WorkUnit(const vector<WorkerReq>& worker_reqs = vector<WorkerReq>(),
         float volume = 1, bool isServiceUnit = false) : worker_reqs(worker_reqs), volume(volume), isServiceUnit(isServiceUnit) {}*/
-    explicit WorkUnit(const vector<WorkerReq>& worker_reqs = vector<WorkerReq>(),
-        float volume = 1, bool is_service_unit = false) : worker_reqs(worker_reqs), volume(volume), is_service_unit(is_service_unit) {}
+    /*explicit WorkUnit(const vector<WorkerReq>& worker_reqs = vector<WorkerReq*>(),
+        float volume = 1, bool is_service_unit = false) : worker_reqs(worker_reqs), volume(volume), is_service_unit(is_service_unit) {}*/
+    explicit WorkUnit(vector<WorkerReq*> worker_reqs = vector<WorkerReq*>(),
+        float volume = 1, bool is_service_unit = false) : worker_reqs(worker_reqs), volume(volume), is_service_unit(is_service_unit), Identifiable(id, name) {}
     WorkUnit(string id,
-        string name,
-        const vector<WorkerReq>& worker_reqs = vector<WorkerReq>(),
-        const vector<EquipmentReq>& equipment_reqs = vector<EquipmentReq>(),
-        const vector<MaterialReq> material_reqs = vector<MaterialReq>(),
-        const vector<ConstructionObjectReq>& object_reqs = vector<ConstructionObjectReq>(),
-        const vector<ZoneReq>& zone_reqs = vector<ZoneReq>(),
-        string group,
-        bool is_service_unit = false,
-        float volume = 0,
-        string volume_type = "unit",
-        string display_name = "",
-        int workground_size = 100) : Identifiable(id, name), worker_reqs(worker_reqs),
-        equipment_reqs(equipment_reqs), material_reqs(material_reqs), object_reqs(object_reqs),
-        zone_reqs(zone_reqs), group(group), is_service_unit(is_service_unit), volume(volume), 
-        volume_type(volume_type), display_name(display_name), workground_size(workground_size) {
-        //Identifiable idef(id, name);
+            string name,
+            const vector<WorkerReq*> worker_reqs = vector<WorkerReq*>(),
+            const vector<EquipmentReq>& equipment_reqs = vector<EquipmentReq>(),
+            const vector<MaterialReq*> material_reqs = vector<MaterialReq*>(),
+            const vector<ConstructionObjectReq>& object_reqs = vector<ConstructionObjectReq>(),
+            const vector<ZoneReq*> zone_reqs = vector<ZoneReq*>(),
+            string group,
+            bool is_service_unit = false,
+            float volume = 0,
+            string volume_type = "unit",
+            string display_name = "",
+            int workground_size = 100) : Identifiable(id, name), worker_reqs(worker_reqs),
+            equipment_reqs(equipment_reqs), material_reqs(material_reqs), object_reqs(object_reqs),
+            zone_reqs(zone_reqs), group(group), is_service_unit(is_service_unit), volume(volume), 
+            volume_type(volume_type), display_name(display_name), workground_size(workground_size) {
+            //Identifiable idef(id, name);
     }
     float get_volume() {
         return volume;
@@ -84,11 +86,11 @@ public:
     vector<WorkerReq*> get_worker_reqs() {
         return worker_reqs;
     }
-    vector< Material> need_materials() {
-        vector<Material> material;
+    vector< Material*> need_materials() {
+        vector<Material*> material;
 
-        for (auto req : material_reqs) {
-            material.push_back(req.material());
+        for (const auto& req : material_reqs) {
+            material.emplace_back(req->material());
         }
 
         return material;

@@ -59,8 +59,8 @@ public:
 public:
     explicit MaterialReq(string name = "") {}
     //Material(string kind, int count, name = ""){}
-    Material material() {
-        Material rez(name, kind, count);
+    Material* material() {
+        Material *rez = &Material::Material(name, kind, count);
         return rez;
     }
 };

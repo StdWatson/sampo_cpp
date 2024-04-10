@@ -42,6 +42,15 @@
     <ClCompile Include="resources.h">
       <Filter>Файлы заголовков\schemas</Filter>
     </ClCompile>
+    <ClCompile Include="material_timeline.cpp">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="momentum_timeline.cpp">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClCompile>
+    <ClCompile Include="zone_timeline.cpp">
+      <Filter>Файлы заголовков\timeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contractor.h">

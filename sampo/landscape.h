@@ -14,7 +14,11 @@ public:
 	//string name;
 	//int count;
 
-	ResourceSupply(string id, string name, int count) : Resource(id, name, count){};
+	explicit ResourceSupply(string id, string name, int count) : Resource(id, name, count){};
+
+	//virtual vector<ResourceHolder> get_available_resources() const = 0;
+	virtual vector<pair<int, string>> get_available_resources() const = 0;
+
 };
 class Road : public ResourceSupply {
 public:
@@ -25,18 +29,19 @@ public:
 	Road(string id, string name, IntervalGaussian throughput) : ResourceSupply(id, name, int(throughput.mean)) {};
 };
 class ResourceHolder : public ResourceSupply {
-public:
+private:
 	string _id;
 	string _name;
 	IntervalGaussian _productivity;
 	vector<Material> _materials;
 
+public:
 	ResourceHolder(string id, string name, IntervalGaussian productivity, vector<Material> materials)
 		: ResourceSupply(id, name, int(productivity.mean)), _id(id), _name(name), _productivity(productivity), _materials(materials) {};
 
-	ResourceHolder copy() {
-		return ResourceHolder(_id, _name, _productivity, _materials);
-	}
+	/*ResourceHolder copy() {
+		return ResourceHolder(this->_id, this->_name, this->_productivity, this->_materials);
+	}*/
 	vector<pair<int, string>> get_available_resources() {
 		vector<pair<int, string>> AvailableResources;
 
@@ -49,35 +54,57 @@ public:
 };
 class LandscapeConfiguration {
 public:
-	vector<Road> roads;
-	vector<ResourceHolder> holders;
-	ZoneConfiguration zone_config;
+	vector<Road*> roads;
+	vector<ResourceHolder*> holders;
+	ZoneConfiguration* zone_config;
 public:
-	LandscapeConfiguration(vector<Road> roads = {}, vector<ResourceHolder> holders = {}, ZoneConfiguration zone_config())
+	LandscapeConfiguration(vector<Road*> roads = {}, vector<ResourceHolder*> holders = {}, ZoneConfiguration* zone_config())
 		: roads(roads), holders(holders) {};
 
-	vector<ResourceSupply> get_all_resources() {
-		vector<ResourceSupply> all_resourses;
+	vector<ResourceSupply*> get_all_resources() {
+		vector<ResourceSupply*> all_resourses;
 
 		//for (auto _road : roads) {
 		for (int i = 0; i < roads.size(); i++) {
 			//all_resourses.push_back(&contractorid);
 			//Road roads;
 
-			ResourceSupply res_supl(roads[i].id, roads[i].AgentId.name, roads[i]._count);
+			//ResourceSupply res_supl(roads[i].id, roads[i].AgentId.name, roads[i]._count);
+			//ResourceSupply res_supl;
 
-			all_resourses.push_back(res_supl);
+			//all_resourses.push_back(res_supl);
 			//Road road;
 			
 			//all_resourses.push_back(&contractorid);
+			all_resourses.emplace_back(roads[i]->id, roads[i]->AgentId.name, roads[i]->_count);
 		}
 		for (int i = 0; i < holders.size(); i++) {
-			ResourceSupply res_supl(holders[i].id, holders[i].AgentId.name, holders[i]._count);
-			all_resourses.push_back(res_supl);
+			/*ResourceSupply res_supl(holders[i].id, holders[i].AgentId.name, holders[i]._count);
+			all_resourses.push_back(res_supl);*/
+			all_resourses.emplace_back(holders[i]->id, holders[i]->AgentId.name, holders[i]->_count);
 		}
 
 		return all_resourses;
 	}
+	/*virtual vector<ResourceHolder> get_available_resources() const = 0;*/
+	//vector<ResourceHolder> get_all_resources_holders() {
+	//	vector<ResourceHolder> all_resourses_holders;
+
+	//	//for (auto _road : roads) {
+	//	for (int i = 0; i < roads.size(); i++) {
+	//		//ResourceHolder res_supl(roads[i].id, roads[i].AgentId.name, roads[i]._count);
+	//		ResourceHolder res_supl(roads[i].id, 
+
+	//		//all_resourses.push_back(res_supl);
+	//		all_resourses_holders.emplace_back(res_supl);
+	//	}
+	//	for (int i = 0; i < holders.size(); i++) {
+	//		ResourceHolder res_supl(holders[i].id, holders[i].AgentId.name, holders[i]._count);
+	//		all_resourses_holders.push_back(res_supl);
+	//	}
+
+	//	return all_resourses_holders;
+	//}
 };
 
 class MaterialDelivery {

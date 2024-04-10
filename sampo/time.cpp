@@ -107,6 +107,10 @@ bool Time::operator==(Time& other) const {
     return this->value == other.value;
 }
 
+bool Time::operator==(const Time& other) const {
+    return this->value == other.value;
+}
+
 bool Time::operator==(int other) const {
     return this->value == other;
 }

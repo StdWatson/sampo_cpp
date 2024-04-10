@@ -10,21 +10,38 @@
 
 using namespace std;
 
-class WorkEstimationMode {
+//class WorkEstimationMode {
+//public:
+//	int Pessimistic = -1;
+//	int Realistic = 0;
+//	int Optimistic = 1;
+//public:
+//	int get_Pessimistic() {
+//		return Pessimistic;
+//	}
+//	int get_Realistic() {
+//		return Realistic;
+//	}
+//	int get_Optimistic() {
+//		return Optimistic;
+//	}
+//};
+enum WorkEstimationMode {
+	Pessimistic = -1,
+	Realistic = 0,
+	Optimistic = 1
+};
+class WorkTimeEstimator {
 public:
-	int Pessimistic = -1;
-	int Realistic = 0;
-	int Optimistic = 1;
+	//WorkEstimationMode workestimationmode;
 public:
-	int get_Pessimistic() {
-		return Pessimistic;
-	}
-	int get_Realistic() {
-		return Realistic;
-	}
-	int get_Optimistic() {
-		return Optimistic;
-	}
+	virtual void set_estimation_mode(bool use_idle = true, int node = 0) const = 0;
+
+	virtual void set_estimation_mode(std::string mode = "static") const = 0;
+
+	virtual std::map<std::string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) const = 0;
+
+	virtual Time estimate_time(WorkUnit* work_unit, std::vector< Worker*> worker_list) const = 0;
 };
 
 //typedef struct {
@@ -45,10 +62,11 @@ float communication_coefficient(int groups_count, int max_groups) {
 	return 1 / ((6 * m * m) * (-2 * n * n * n + 3 * n * n + (6 * m * m - 1) * n));
 }
 
-class DefaultWorkEstimator {
-public:
+class DefaultWorkEstimator : virtual WorkTimeEstimator {
+//public:
+private:
 	bool _use_idle;
-	WorkEstimationMode _WorkEstimationMode;
+	//WorkEstimationMode _WorkEstimationMode;
 	WorkerProductivityMode _WorkerProductivityMode;
 	int _estimation_mode;
 	string _productivity_mode;
@@ -57,10 +75,11 @@ public:
 public:
 	DefaultWorkEstimator(bool _use_idle = 1, int _estimation_mode, string _productivity_mode) : _estimation_mode(_estimation_mode),
 		_productivity_mode(_productivity_mode) {
-		_estimation_mode = _WorkEstimationMode.Realistic;
+		_estimation_mode = WorkEstimationMode::Realistic;
 		_productivity_mode = _WorkerProductivityMode.Static;
 	}
-	map<string, int> find_work_resources(string work_name, float work_volume, vector<string> resource_name) {
+	//map<string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) {
+	std::map<std::string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) {
 		if (resource_name.max_size() == 0) {
 			resource_name = { "driver", "fitter", "manager", "handyman", "electrician", "engineer" };
 		}
@@ -73,32 +92,32 @@ public:
 	float get_productivity_of_worker(Worker* worker, int max_groups = 0, string productivity_mode = "Static") {
 		return worker->get_productivity(productivity_mode) * communication_coefficient(worker->count, max_groups);
 	}
-	Time estimate_time(WorkUnit *work_unit, vector< Worker*> worker_list) {
+	Time estimate_time(WorkUnit* work_unit, std::vector< Worker*> worker_list) {
 		if (worker_list.size() == 0)
 			return Time(0);
 		vector<Time> times = { Time(0) };
-		std::map<std::string, Worker*> name2worker = build_index(worker_list);
+		std::map<std::string, Worker*> name2worker = build_index_str_wrk(worker_list);
 
 		for (auto req : work_unit->worker_reqs) {
 			int worker_count = 0;
-			DefaultWorkEstimator def_est;
+			//DefaultWorkEstimator def_est;
 
-			if (req.min_count == 0)
+			if (req->get_min_count() == 0)
 				continue;
-			string name = req.get_kind();
+			string name = req->get_kind();
 			Worker* worker = name2worker[name];
 
 			if (worker == NULL)
 				worker_count = 0;
 			else
 				worker_count = worker->count;
-			if (worker_count < req.get_min_count())
+			if (worker_count < req->get_min_count())
 				return Time::inf();
-			float productivity = def_est.get_productivity_of_worker(worker, req.max_count, _productivity_mode) / worker_count;
+			float productivity = this->get_productivity_of_worker(worker, req->get_max_count(), _productivity_mode) / worker_count;
 
 			if (productivity == 0)
 				return Time::inf();
-			times.push_back(req.volume / productivity);
+			times.push_back(req->get_volume() / productivity);
 		}
 		Time prev_time = times[0], max_time = Time(0);
 

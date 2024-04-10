@@ -130,9 +130,12 @@
     <ClCompile Include="graph.h" />
     <ClCompile Include="interval.h" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="material_timeline.cpp" />
+    <ClCompile Include="momentum_timeline.cpp" />
     <ClCompile Include="resources.h" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="Time_test.cpp" />
+    <ClCompile Include="zone_timeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collections_util.h" />

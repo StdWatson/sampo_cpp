@@ -50,6 +50,8 @@ public:
 
     bool operator==(Time& other) const;
 
+    bool operator==(const Time& other) const;
+
     bool operator==(int other) const;
 
     bool operator!=(Time& other) const;
