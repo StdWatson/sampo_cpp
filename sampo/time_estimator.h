@@ -31,18 +31,43 @@ enum WorkEstimationMode {
 	Realistic = 0,
 	Optimistic = 1
 };
+//class WorkTimeEstimator
+
 class WorkTimeEstimator {
+private:
+	int mode = 0;    // 0 - 10%, 1 - 50%, 2 - 90%
+	string path;
+
 public:
-	//WorkEstimationMode workestimationmode;
-public:
-	virtual void set_estimation_mode(bool use_idle = true, int node = 0) const = 0;
+	explicit WorkTimeEstimator(string path) : path(std::move(path)) { }
 
-	virtual void set_estimation_mode(std::string mode = "static") const = 0;
+	void setMode(int mode) {
+		this->mode = mode;
+	}
 
-	virtual std::map<std::string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) const = 0;
+	string& getPath() {
+		return this->path;
+	}
 
-	virtual Time estimate_time(WorkUnit* work_unit, std::vector< Worker*> worker_list) const = 0;
+	virtual Time estimateTime(const WorkUnit& work, const vector<Worker>& workers) const = 0;
+	virtual std::unordered_map<std::string, int> find_work_resources(std::string& work_name, float work_volume, std::vector< std::string>& resource_name) const = 0;
+
+
+	virtual ~WorkTimeEstimator() = default;
 };
+//class WorkTimeEstimator {
+//public:
+//	//WorkEstimationMode workestimationmode;
+//public:
+//	virtual void set_estimation_mode(bool use_idle = true, WorkEstimationMode node = Realistic) const = 0;
+//
+//	virtual void set_estimation_mode(std::string mode = "static") const = 0;
+//	//virtual void set_estimation_mode(WorkerProductivityMode mode = ) const = 0;
+//
+//	virtual std::unordered_map<std::string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) const = 0;
+//
+//	virtual Time estimate_time(WorkUnit* work_unit, std::vector< Worker*> worker_list) const = 0;
+//};
 
 //typedef struct {
 //	int Pessimistic = -1;
@@ -65,47 +90,47 @@ float communication_coefficient(int groups_count, int max_groups) {
 class DefaultWorkEstimator : virtual WorkTimeEstimator {
 //public:
 private:
-	bool _use_idle;
+	bool use_idle;
 	//WorkEstimationMode _WorkEstimationMode;
-	WorkerProductivityMode _WorkerProductivityMode;
-	int _estimation_mode;
-	string _productivity_mode;
+	WorkerProductivityMode WorkerProductivityMode;
+	int estimation_mode;
+	string productivity_mode;
 	//Random rand;
 
 public:
-	DefaultWorkEstimator(bool _use_idle = 1, int _estimation_mode, string _productivity_mode) : _estimation_mode(_estimation_mode),
-		_productivity_mode(_productivity_mode) {
-		_estimation_mode = WorkEstimationMode::Realistic;
-		_productivity_mode = _WorkerProductivityMode.Static;
+	DefaultWorkEstimator(bool use_idle = 1, int estimation_mode, string productivity_mode) : estimation_mode(estimation_mode),
+		productivity_mode(productivity_mode) {
+		estimation_mode = WorkEstimationMode::Realistic;
+		productivity_mode = WorkerProductivityMode.Static;
 	}
 	//map<string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) {
-	std::map<std::string, int> find_work_resources(std::string work_name, float work_volume, std::vector< std::string> resource_name = {}) {
+	std::unordered_map<std::string, int> find_work_resources(std::string& work_name, float work_volume, std::vector< std::string>& resource_name) {
 		if (resource_name.max_size() == 0) {
 			resource_name = { "driver", "fitter", "manager", "handyman", "electrician", "engineer" };
 		}
-		std::map<std::string, int> resources;
+		std::unordered_map<std::string, int> resources;
 		for (const std::string& name : resource_name) {
 			resources[name] = rand.poisson(pow(work_volume, 0.5));
 		}
 		return resources;
 	}
-	float get_productivity_of_worker(Worker* worker, int max_groups = 0, string productivity_mode = "Static") {
-		return worker->get_productivity(productivity_mode) * communication_coefficient(worker->count, max_groups);
+	float get_productivity_of_worker(Worker worker, int max_groups = 0, string productivity_mode = "Static") {
+		return worker.get_productivity(productivity_mode) * communication_coefficient(worker.count, max_groups);
 	}
-	Time estimate_time(WorkUnit* work_unit, std::vector< Worker*> worker_list) {
+	Time estimate_time(WorkUnit& work_unit, std::vector< Worker>& worker_list) {
 		if (worker_list.size() == 0)
 			return Time(0);
 		vector<Time> times = { Time(0) };
-		std::map<std::string, Worker*> name2worker = build_index_str_wrk(worker_list);
+		std::map<std::string, Worker> name2worker = build_index_str_wrk(worker_list);
 
-		for (auto req : work_unit->worker_reqs) {
+		for (auto req : work_unit.worker_reqs) {
 			int worker_count = 0;
 			//DefaultWorkEstimator def_est;
 
 			if (req->get_min_count() == 0)
 				continue;
 			string name = req->get_kind();
-			Worker* worker = name2worker[name];
+			Worker worker = name2worker[name];
 
 			if (worker == NULL)
 				worker_count = 0;
@@ -113,7 +138,7 @@ public:
 				worker_count = worker->count;
 			if (worker_count < req->get_min_count())
 				return Time::inf();
-			float productivity = this->get_productivity_of_worker(worker, req->get_max_count(), _productivity_mode) / worker_count;
+			float productivity = this->get_productivity_of_worker(worker, req->get_max_count(), productivity_mode) / worker_count;
 
 			if (productivity == 0)
 				return Time::inf();

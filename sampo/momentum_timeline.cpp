@@ -2,20 +2,21 @@
 
 #include "momentum_timeline.h"
 
-MomentumTimeline::MomentumTimeline(WorkerContractorPool worker_pool, LandscapeConfiguration* landscape) : worker_pool(worker_pool), landscape(landscape) {
+MomentumTimeline::MomentumTimeline(WorkerContractorPool worker_pool, LandscapeConfiguration landscape) : worker_pool(worker_pool), landscape(landscape) {
 	for (const auto worker_itm : worker_pool) {
 		for (const auto& contractor_itm : worker_itm.second) {
-			if (!this->_timeline[contractor_itm.first].size())
-				this->_timeline[contractor_itm.first] = {};
-			EventType eventtype;
-			ScheduleEvent* shudevent = &ScheduleEvent(-1, eventtype.INITIAL, Time(0), contractor_itm.second->count);
-			this->_timeline[contractor_itm.first][worker_itm.first].push_back(shudevent);
+			if (!this->timeline[contractor_itm.first].size())
+				this->timeline[contractor_itm.first] = {};
+			EventType eventInitial = INITIAL;
+			ScheduleEvent shudevent(-1, eventInitial, /*eventtype.INITIAL,*/ Time(0), contractor_itm.second->count);
+			this->timeline[contractor_itm.first][worker_itm.first].push_back(shudevent);
 		}
 	}
-	this->_task_index = 0;
-	this->_material_timeline = &SupplyTimeline::SupplyTimeline(landscape);
+	this->task_index = 0;
+	this->material_timeline = SupplyTimeline(landscape);
 	//this->zone_timeline = &ZoneTimeline::ZoneTimeline(landscape->zone_config);
-	this->zone_timeline = &ZoneTimeline::ZoneTimeline(landscape->zone_config);
+	//this->zone_timeline = ZoneTimeline::ZoneTimeline(landscape.zone_config);
+	zone_timeline = ZoneTimeline::ZoneTimeline(landscape.zone_config);
 }
 Time MomentumTimeline::apply_time_spec(Time time, Time assigned_start_time)
 {

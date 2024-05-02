@@ -51,6 +51,9 @@
     <ClCompile Include="zone_timeline.cpp">
       <Filter>Файлы заголовков\timeline</Filter>
     </ClCompile>
+    <ClCompile Include="scheduled_work.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contractor.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="collections_util.h">
       <Filter>Файлы заголовков\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="base.h">
+      <Filter>Файлы заголовков\timeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

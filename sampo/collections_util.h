@@ -7,8 +7,8 @@
 
 //using namespace std;
 
-std::map<std::string, Worker*> build_index_str_wrk(vector<Worker*> workers) {
-	std::map<std::string, Worker*> diction;
+std::unordered_map<std::string, Worker> build_index_str_wrk(vector<Worker> workers) {
+	std::unordered_map<std::string, Worker> diction;
 	int i = 0;
 
 	//for (auto item : items) {
@@ -23,17 +23,17 @@ std::map<std::string, Worker*> build_index_str_wrk(vector<Worker*> workers) {
 	//}
 
 	for (auto item : workers) {
-		diction[item->get_name()] = item;
+		diction[item.get_name()] = item;
 	}
 
 	return diction;
 }
-std::map<std::string, int> build_index_str_zone_int(vector<ZoneReq*> zones) {
+std::map<std::string, int> build_index_str_zone_int(vector<ZoneReq>& zones) {
 	std::map<std::string, int> diction;
 	int i = 0;
 
 	for (auto item : zones) {
-		diction[item->kind] = item->required_status;
+		diction[item.kind] = item.required_status;
 	}
 
 	return diction;

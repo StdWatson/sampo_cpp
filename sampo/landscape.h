@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+
 #include "interval.h"
 #include "resources.h"
 
@@ -14,10 +16,12 @@ public:
 	//string name;
 	//int count;
 
-	explicit ResourceSupply(string id, string name, int count) : Resource(id, name, count){};
+	explicit ResourceSupply(string& id, string& name, int count) : Resource(id, name, count){};
 
 	//virtual vector<ResourceHolder> get_available_resources() const = 0;
-	virtual vector<pair<int, string>> get_available_resources() const = 0;
+	virtual vector<unordered_map<int, string>>& get_available_resources() const = 0;
+
+	virtual int get_count() const = 0;
 
 };
 class Road : public ResourceSupply {
@@ -26,43 +30,48 @@ public:
 	//string name;
 	//IntervalGaussian throughput;
 
-	Road(string id, string name, IntervalGaussian throughput) : ResourceSupply(id, name, int(throughput.mean)) {};
+	Road(string& id, string& name, IntervalGaussian throughput) : ResourceSupply(id, name, int(throughput.mean)) {};
 };
 class ResourceHolder : public ResourceSupply {
 private:
-	string _id;
-	string _name;
-	IntervalGaussian _productivity;
-	vector<Material> _materials;
+	string& id;
+	string& name;
+	IntervalGaussian productivity;
+	vector<Material> &materials;
 
 public:
-	ResourceHolder(string id, string name, IntervalGaussian productivity, vector<Material> materials)
-		: ResourceSupply(id, name, int(productivity.mean)), _id(id), _name(name), _productivity(productivity), _materials(materials) {};
+	ResourceHolder(string& id, string& name, IntervalGaussian productivity, vector<Material> materials)
+		: ResourceSupply(id, name, int(productivity.mean)), id(id), name(name), productivity(productivity), materials(materials) {};
 
 	/*ResourceHolder copy() {
 		return ResourceHolder(this->_id, this->_name, this->_productivity, this->_materials);
 	}*/
-	vector<pair<int, string>> get_available_resources() {
-		vector<pair<int, string>> AvailableResources;
+	vector<unordered_map<int, string>>& get_available_resources() {
+		vector<unordered_map<int, string>> AvailableResources;
 
-		for (Material materials : _materials) {
-			AvailableResources.push_back(make_pair(materials.count, materials.name));
+		for (const auto& material : materials) {
+			//AvailableResources.push_back(make_pair(materials.count, materials.name));
+			unordered_map<int, string> el = { {material.count , material.name } };
+			AvailableResources.push_back(el);
 		}
 
 		return AvailableResources;
 	}
+	string& get_id() {
+		return id;
+	}
 };
 class LandscapeConfiguration {
 public:
-	vector<Road*> roads;
-	vector<ResourceHolder*> holders;
-	ZoneConfiguration* zone_config;
+	vector<Road>& roads;
+	vector<ResourceHolder>& holders;
+	ZoneConfiguration zone_config;
 public:
-	LandscapeConfiguration(vector<Road*> roads = {}, vector<ResourceHolder*> holders = {}, ZoneConfiguration* zone_config())
+	LandscapeConfiguration(vector<Road>& roads, vector<ResourceHolder>& holders, ZoneConfiguration zone_config)
 		: roads(roads), holders(holders) {};
 
-	vector<ResourceSupply*> get_all_resources() {
-		vector<ResourceSupply*> all_resourses;
+	vector<ResourceSupply>& get_all_resources() {
+		vector<ResourceSupply> all_resourses;
 
 		//for (auto _road : roads) {
 		for (int i = 0; i < roads.size(); i++) {
@@ -76,12 +85,12 @@ public:
 			//Road road;
 			
 			//all_resourses.push_back(&contractorid);
-			all_resourses.emplace_back(roads[i]->id, roads[i]->AgentId.name, roads[i]->_count);
+			all_resourses.emplace_back(roads[i].id, roads[i].AgentId.name, roads[i].get_count());
 		}
 		for (int i = 0; i < holders.size(); i++) {
 			/*ResourceSupply res_supl(holders[i].id, holders[i].AgentId.name, holders[i]._count);
 			all_resourses.push_back(res_supl);*/
-			all_resourses.emplace_back(holders[i]->id, holders[i]->AgentId.name, holders[i]->_count);
+			all_resourses.emplace_back(holders[i].get_id(), holders[i].AgentId.name, holders[i].get_count());
 		}
 
 		return all_resourses;

@@ -14,9 +14,14 @@ using namespace std;
 
 class WorkerProductivityMode {
 public:
-	std::string Static = "static";
-	std::string Stohastic = "stohastic";
+	const std::string Static = "static";
+	const std::string Stohastic = "stohastic";
 };
+
+//struct WorkerProductivityMode {
+//	const std::string Static = "static";
+//	const std::string Stohastic = "stohastic";
+//};
 
 //enum WorkerProductivityMode {
 //	Static = "static",
@@ -29,11 +34,12 @@ typedef struct {
 } agentId;
 
 class Resource {				//íàäî ñäåëàòü êîíñòðóêòîð
-//private:
+private:
+	int count;
 public:
 	std::string id;
 	agentId AgentId;
-	int _count;
+	//int count;
 	
 
 	/*typedef struct {
@@ -41,11 +47,22 @@ public:
 		std::string contractor_id;
 	} AgentId;*/
 public:
-	Resource(string id, string name, int count, string contractor_id = "") :
-					id(id), /*name(name),*/ _count(count) {
+	//Resource(string id, string name, int count, string contractor_id = "") :
+	//				id(id), /*name(name),*/ _count(count) {
+	//	AgentId.name = name;
+	//	AgentId.contractor_id = contractor_id;
+	//}
+	Resource(string id = "", string name = "", int count = 0, string contractor_id = "") :
+		id(id), /*name(name),*/ count(count) {
 		AgentId.name = name;
 		AgentId.contractor_id = contractor_id;
 	}
+
+	const string& name() const {
+		return AgentId.name;
+	}
+
+
 	/*void set_id(std::string value) {
 		id = value;
 	}
@@ -71,10 +88,10 @@ public:
 		return contractor_id;
 	}*/
 	void count(int value) {
-		_count = value;
+		this->count = value;
 	}
-	int count() {
-		return _count;
+	int get_count() {
+		return this->count;
 	}
 };
 
@@ -121,8 +138,12 @@ public:
 };
 
 class ConstructionObject : public Resource {
-
+public:
+	ConstructionObject() : Resource() {}
 };
+//class ConstructionObject : public Resource {
+//
+//};
 
 class Equipment : public Resource {
 
@@ -136,7 +157,7 @@ public:
 	int count;
 	float cost_one_unit;
 public:
-	Material(string id, string name, int count, float cost_one_unit = 1) : Resource (id, name, count) {
+	Material(string& id, string& name, int count, float cost_one_unit = 1) : Resource (id, name, count) {
 	//Material () : Resource(string id, string name, int count)
 	}
 	std::string get_id() {

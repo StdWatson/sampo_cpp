@@ -37,11 +37,13 @@ class ZoneReq {
 public:
     std::string kind;
     int required_status;
-    std::string name;
+    //std::string name;
 public:
+    ZoneReq(std::string kind, int required_status) : kind(kind), required_status(required_status) {}
 
     Zone to_zone() {
-        Zone Z(kind, required_status);
+        Zone Z(this->kind, required_status);
+        
         return Z;
     }
 };
@@ -59,8 +61,8 @@ public:
 public:
     explicit MaterialReq(string name = "") {}
     //Material(string kind, int count, name = ""){}
-    Material* material() {
-        Material *rez = &Material::Material(name, kind, count);
+    Material material() {
+        Material rez = Material::Material(name, kind, count);
         return rez;
     }
 };

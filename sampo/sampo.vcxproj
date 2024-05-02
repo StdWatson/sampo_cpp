@@ -133,11 +133,13 @@
     <ClCompile Include="material_timeline.cpp" />
     <ClCompile Include="momentum_timeline.cpp" />
     <ClCompile Include="resources.h" />
+    <ClCompile Include="scheduled_work.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="Time_test.cpp" />
     <ClCompile Include="zone_timeline.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base.h" />
     <ClInclude Include="collections_util.h" />
     <ClInclude Include="contractor.h" />
     <ClInclude Include="contractor_test.h" />
