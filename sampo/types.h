@@ -33,34 +33,33 @@ enum EventType {
 	START = 0,
 	END = 1
 };
-struct ScheduleEvent {
-	ScheduleEvent(
-		int seq_id,
-		EventType event_type,
-		Time time,
-		int available_workers_count)
-		: seq_id(seq_id),
-		event_type(event_type),
-		time(time),
-		available_workers_count(available_workers_count) {}
+//struct ScheduleEvent {
+//	ScheduleEvent(
+//		int seq_id,
+//		EventType event_type,
+//		Time time,
+//		int available_workers_count)
+//		: seq_id(seq_id),
+//		event_type(event_type),
+//		time(time),
+//		available_workers_count(available_workers_count) {}
+//
+//	int seq_id;
+//	//int event_type;
+//	EventType event_type;
+//	Time time;
+//	int available_workers_count;
+//};
 
-	int seq_id;
-	//int event_type;
-	EventType event_type;
-	Time time;
-	int available_workers_count;
-};
-
-//template <typename T>
 //class ScheduleEvent {           //ξαϊÿβλεν β types.h
 //public:
 //    EventType type;
 //    Time time;
 //    int event_idx;
-//    T* obj;
+//    //T* obj;
 //
-//    ScheduleEvent(EventType type, Time time, int event_idx, T* obj = nullptr)
-//        : type(type), time(time), event_idx(event_idx), obj(obj) {}
+//    ScheduleEvent(EventType type, Time time, int event_idx)
+//        : type(type), time(time), event_idx(event_idx) {}
 //};
 
 //class ScheduleEvent {

@@ -148,6 +148,14 @@ Time& Time::operator-=(const Time& other) {
     return this->operator-=(other.value);
 }
 
+bool Time::operator!=(int other) {
+    return this->value != other;
+}
+
+bool Time::operator!=(const Time& other) {
+    return this->value != other.value;
+}
+
 
 //
 //#define TIME_INF 2000000000

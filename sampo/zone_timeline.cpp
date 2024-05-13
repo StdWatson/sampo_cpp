@@ -77,7 +77,7 @@ Time& ZoneTimeline::find_min_start_time(vector< ZoneReq>& zones, Time& parent_ti
 
 		if (found_start >= start) {
 			cout << "found_start >= start" << endl;
-			exit(-1);
+			return found_start;
 		}
 		if ((scheduled_wreqs.size() == 0) || (start == found_start)) {
 			scheduled_wreqs.push_back(wreq);

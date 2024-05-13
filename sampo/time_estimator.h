@@ -2,6 +2,7 @@
 //	SAMPO-main/sampo/schemas/time_estimator -
 #include <string>
 #include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "resources.h"
@@ -121,28 +122,48 @@ public:
 		if (worker_list.size() == 0)
 			return Time(0);
 		vector<Time> times = { Time(0) };
-		std::map<std::string, Worker> name2worker = build_index_str_wrk(worker_list);
+		std::unordered_map<std::string, Worker> name2worker = build_index_str_wrk(worker_list);
 
 		for (auto req : work_unit.worker_reqs) {
 			int worker_count = 0;
 			//DefaultWorkEstimator def_est;
 
-			if (req->get_min_count() == 0)
+			if (req.get_min_count() == 0)
 				continue;
-			string name = req->get_kind();
-			Worker worker = name2worker[name];
+			string name = req.get_kind();
+			//Worker worker = name2worker[name];
 
-			if (worker == NULL)
+			if (name2worker.find(name) != name2worker.end()) {
+				Worker worker = name2worker[name];
+				worker_count = worker.count;
+
+				if (worker_count < req.get_min_count())
+					return Time::inf();
+				float productivity = this->get_productivity_of_worker(worker, req.get_max_count(), productivity_mode) / worker_count;
+
+				if (productivity == 0)
+					return Time::inf();
+				times.push_back(req.get_volume() / productivity);
+			}
+			else {
+				cout << "Error no element: " << name << "in name2worker" << endl;
+				return Time::inf();
+			}
+			
+
+			/*Worker worker = name2worker[name];
+
+			if (worker == 0)
 				worker_count = 0;
 			else
-				worker_count = worker->count;
+				worker_count = worker.count;
 			if (worker_count < req->get_min_count())
 				return Time::inf();
 			float productivity = this->get_productivity_of_worker(worker, req->get_max_count(), productivity_mode) / worker_count;
 
 			if (productivity == 0)
 				return Time::inf();
-			times.push_back(req->get_volume() / productivity);
+			times.push_back(req->get_volume() / productivity);*/
 		}
 		Time prev_time = times[0], max_time = Time(0);
 

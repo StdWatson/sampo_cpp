@@ -72,6 +72,10 @@ public:
     Time& operator-=(int other);
 
     Time& operator-=(const Time& other);
+
+    bool operator!=(int other);
+
+    bool operator!=(const Time& other);
 };
 
 #endif    // NATIVE_TIME_H

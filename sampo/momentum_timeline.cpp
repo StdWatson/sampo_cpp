@@ -9,14 +9,15 @@ MomentumTimeline::MomentumTimeline(WorkerContractorPool worker_pool, LandscapeCo
 				this->timeline[contractor_itm.first] = {};
 			EventType eventInitial = INITIAL;
 			ScheduleEvent shudevent(-1, eventInitial, /*eventtype.INITIAL,*/ Time(0), contractor_itm.second->count);
-			this->timeline[contractor_itm.first][worker_itm.first].push_back(shudevent);
+			this->timeline[contractor_itm.first][worker_itm.first].add(shudevent);
 		}
 	}
 	this->task_index = 0;
 	this->material_timeline = SupplyTimeline(landscape);
 	//this->zone_timeline = &ZoneTimeline::ZoneTimeline(landscape->zone_config);
 	//this->zone_timeline = ZoneTimeline::ZoneTimeline(landscape.zone_config);
-	zone_timeline = ZoneTimeline::ZoneTimeline(landscape.zone_config);
+	/*zone_timeline = ZoneTimeline::ZoneTimeline(landscape.zone_config);*/
+	zone_timeline = ZoneTimeline(landscape.zone_config);
 }
 Time MomentumTimeline::apply_time_spec(Time time, Time assigned_start_time)
 {
@@ -25,22 +26,38 @@ Time MomentumTimeline::apply_time_spec(Time time, Time assigned_start_time)
 	else
 		return time;
 }
-Time MomentumTimeline::_find_earliest_time_slot(vector< ScheduleEvent*> state,
-		Time parent_time,
-		Time exec_time,
-		int required_worker_count,
-		WorkSpec* spec)
+//Time MomentumTimeline::find_earliest_time_slot(vector< ScheduleEvent>& state,
+//		Time& parent_time,
+//		Time& exec_time,
+//		int required_worker_count,
+//		WorkSpec& spec)
+Time MomentumTimeline::find_earliest_time_slot(EventSortedList< ScheduleEvent>& state,
+	Time& parent_time,
+	Time& exec_time,
+	int required_worker_count,
+	WorkSpec& spec)
 {
+	if (exec_time == 0) {
+		return parent_time;
+	}
+
 	Time current_start_time = parent_time;
-	int current_start_idx = state.bisect_right(current_start_time) - 1;
+	//int current_start_idx = state.bisect_right(current_start_time)--;
+	std::set<ScheduleEvent<T>>::const_iterator current_start_idx = state.bisect_right(current_start_time)--;
+	Time last_time = state.time;
+
+	if (spec.is_independent) {
+		return state[state.size() - 1].time + 1;
+	}
 
 	for (int i = current_start_idx; i < state.size(); i++) {
-		int end_idx = state.bisect_right(current_start_time + exec_time);
+		Time tmp = current_start_time + exec_time;
+		int end_idx = state.bisect_right(tmp);
 
-		if (spec->is_independent) {
-			if (end_idx - current_start_idx > 1)
-				return state[state.size() - 1]->time + 1;
-		}
+		//if (spec.is_independent) {
+		//	//if (end_idx - current_start_idx > 1)
+		//		return state[state.size() - 1].time + 1;
+		//}
 		bool not_enough_workers_found = false;
 
 		for (int idx = end_idx - 1; idx > current_start_idx - 2; idx--) {
@@ -86,7 +103,7 @@ Time MomentumTimeline::_find_min_start_time(map<string, vector< ScheduleEvent*>>
 			EventType tmp_event;
 
 			if (initial_event->event_type != tmp_event.INITIAL)
-				exit(0);
+				return -1;
 			if (initial_event->available_workers_count < passed_workers[i]->count)
 				return Time::inf();
 			i++;
@@ -105,8 +122,10 @@ Time MomentumTimeline::_find_min_start_time(map<string, vector< ScheduleEvent*>>
 		vector< ScheduleEvent*> state = resource_timeline[wreq->get_kind()];
 
 		Time found_start = _find_earliest_time_slot(state, start, exec_time, type2count[wreq->get_kind()], spec);
-		if (found_start >= start)
-			exit(0);
+		if (found_start >= start) {
+			cout << "found_start >= start" << endl;
+			return found_start;
+		}
 		if ((scheduled_wreqs.size() == 0) || (start == found_start)) {
 			scheduled_wreqs.push_back(wreq);
 			start = max(found_start, start);
@@ -292,24 +311,33 @@ void MomentumTimeline::update_timeline(Time finish_time, Time exec_time, GraphNo
 		for (int i = start_idx; i <= end_idx; i++) {
 			ScheduleEvent* evnt = state[i];
 
-			if (evnt->available_workers_count < w->count)
-				exit(0);
+			if (evnt->available_workers_count < w->count) {
+				cout << "evnt->available_workers_count < w->count" << endl;
+				return;
+			}
+
 			evnt->available_workers_count -= w->count;
 		}
 
-		if (available_workers_count < w->count)
-			exit(0);
+		if (available_workers_count < w->count) {
+			cout << "available_workers_count < w->count" << endl;
+			return;
+		}
 
 		ScheduleEvent* evnt = state[end_idx - 1];
 		int end_count;
 		if (start_idx < end_idx) {
-			if (state[0]->available_workers_count < evnt->available_workers_count + w->count)
-				exit(0);
+			if (state[0]->available_workers_count < evnt->available_workers_count + w->count) {
+				cout << "state[0]->available_workers_count < evnt->available_workers_count + w->count" << endl;
+				return;
+			}
 			end_count = evnt->available_workers_count + w->count;
 		}
 		else {
-			if (state[0]->available_workers_count < evnt->available_workers_count)
-				exit(0);
+			if (state[0]->available_workers_count < evnt->available_workers_count) {
+				cout << state[0]->available_workers_count < evnt->available_workers_count << endl;
+				return;
+			}
 			end_count = evnt->available_workers_count;
 		}
 		EventType eventtype;

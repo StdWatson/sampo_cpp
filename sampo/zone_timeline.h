@@ -37,12 +37,13 @@ tuple<Time, int, int> event_cmp(const T) {
 class ZoneTimeline {
 private:
 	ZoneConfiguration config;
-	unordered_map<string, vector<ScheduleEvent>> timeline;
+	unordered_map<string, vector<ScheduleEvent<Time>>> timeline;
 
 	bool match_status(int target, int match);
-	bool is_inside_interval(vector< ScheduleEvent>& state, int idx);
-	int validate(Time& start_time, Time& exec_time, vector<ScheduleEvent>& state, int required_status);
-	Time& find_earliest_time_slot(vector< ScheduleEvent>& state, Time& parent_time, Time& exec_time, int required_status);
+	//bool is_inside_interval(vector< ScheduleEvent>& state, int idx);
+	bool is_inside_interval(EventSortedList< ScheduleEvent<Time>>& state, int idx);
+	int validate(Time& start_time, Time& exec_time, vector<ScheduleEvent<Time>>& state, int required_status);
+	Time& find_earliest_time_slot(vector< ScheduleEvent<Time>>& state, Time& parent_time, Time& exec_time, int required_status);
 public:
 	ZoneTimeline(ZoneConfiguration config);
 //private:
@@ -56,6 +57,10 @@ public:
 //public:
 	bool can_schedule_at_the_moment(vector< ZoneReq>& zones, Time& start_time, Time& exec_time);
 	vector< ZoneTransition>& update_timeline(int index, vector< Zone>& zones, Time& start_time, Time& exec_time);
+
+	ZoneTimeline operator=(const ZoneTimeline& el) const {
+		return ZoneTimeline(el);
+	}
 };
 
 //class ZoneTimeline {

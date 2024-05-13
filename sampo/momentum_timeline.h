@@ -20,12 +20,19 @@
 
 class MomentumTimeline : Timeline {
 private:
-	unordered_map<string, unordered_map<string, vector< ScheduleEvent>>> timeline;
+	//unordered_map<string, unordered_map<string, vector< ScheduleEvent>>> timeline;
+	//unordered_map<string, unordered_map<string, EventSortedList<ScheduleEvent<>> >> timeline;
 	//unordered_map<std::string, std::vector<ScheduleEvent >> 
+	unordered_map<string, unordered_map<string, EventSortedList<ScheduleEvent<Time>>>> timeline;
 	int task_index;
 	SupplyTimeline material_timeline;
 
-	Time find_earliest_time_slot(vector< ScheduleEvent>& state,
+	/*Time find_earliest_time_slot(vector< ScheduleEvent>& state,
+		Time& parent_time,
+		Time& exec_time,
+		int required_worker_count,
+		WorkSpec& spec);*/
+	Time find_earliest_time_slot(EventSortedList< ScheduleEvent<Time>>& state,
 		Time& parent_time,
 		Time& exec_time,
 		int required_worker_count,
@@ -77,7 +84,7 @@ public:
 		Time assigned_parent_time = Time::Time(0),
 		//WorkTimeEstimator work_estimator = DefaultWorkEstimator());
 		DefaultWorkEstimator* work_estimator);
-	Time& find_min_start_time(map<string, vector< ScheduleEvent>>& resource_timeline,
+	Time& find_min_start_time(map<string, vector< ScheduleEvent<Time>>>& resource_timeline,
 		vector< GraphNode*>& inseparable_chain,
 		WorkSpec& spec,
 		Time& parent_time,

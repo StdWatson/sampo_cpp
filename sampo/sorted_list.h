@@ -5,32 +5,33 @@
 #define SAMPO_SORTED_LIST_H
 
 #include <set>
+
 #include "types.h"
 
 //#include "native/schemas/dtime.h"
 
-enum EventType {
-    START = 0,
-    END = 1
-};
-
-//template <typename T>
-//class ScheduleEvent {           //ξαϊÿβλεν β types.h
-//public:
-//    EventType type;
-//    Time time;
-//    int event_idx;
-//    T* obj;
-//
-//    ScheduleEvent(EventType type, Time time, int event_idx, T* obj = nullptr)
-//        : type(type), time(time), event_idx(event_idx), obj(obj) {}
+//enum EventType {
+//    START = 0,
+//    END = 1
 //};
+
+template <typename T>
+class ScheduleEvent {           //ξαϊÿβλεν β types.h
+public:
+    EventType type;
+    Time time;
+    int event_idx;
+    T* obj;
+
+    ScheduleEvent(EventType type, Time time, int event_idx, T* obj = nullptr)
+        : type(type), time(time), event_idx(event_idx), obj(obj) {}
+};
 
 struct event_cmp {
     template<typename T>
     bool operator()(const ScheduleEvent<T>& a,
         const ScheduleEvent<T>& b) const {
-        if (a.time != b.time) {
+        if (a.time != b.time) { 
             return a.time > b.time;
         }
         if (a.type != b.type) {

@@ -68,7 +68,7 @@ public:
 	ZoneConfiguration zone_config;
 public:
 	LandscapeConfiguration(vector<Road>& roads, vector<ResourceHolder>& holders, ZoneConfiguration zone_config)
-		: roads(roads), holders(holders) {};
+		: roads(roads), holders(holders), zone_config(zone_config) {};
 
 	vector<ResourceSupply>& get_all_resources() {
 		vector<ResourceSupply> all_resourses;
