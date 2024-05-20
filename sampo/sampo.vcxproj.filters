@@ -52,7 +52,7 @@
       <Filter>Файлы заголовков\timeline</Filter>
     </ClCompile>
     <ClCompile Include="scheduled_work.cpp">
-      <Filter>Файлы ресурсов</Filter>
+      <Filter>Файлы заголовков\schemas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

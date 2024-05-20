@@ -18,12 +18,13 @@
 #include "sorted_list.h"
 #include "types.h"
 
-class MomentumTimeline : Timeline {
+class MomentumTimeline : public Timeline {
 private:
 	//unordered_map<string, unordered_map<string, vector< ScheduleEvent>>> timeline;
 	//unordered_map<string, unordered_map<string, EventSortedList<ScheduleEvent<>> >> timeline;
 	//unordered_map<std::string, std::vector<ScheduleEvent >> 
-	unordered_map<string, unordered_map<string, EventSortedList<ScheduleEvent<Time>>>> timeline;
+	//unordered_map<string, unordered_map<string, EventSortedList<ScheduleEvent<Time>>>> timeline;
+	unordered_map<string, unordered_map<string, EventSortedList<Time>>> timeline;
 	int task_index;
 	SupplyTimeline material_timeline;
 
@@ -32,11 +33,12 @@ private:
 		Time& exec_time,
 		int required_worker_count,
 		WorkSpec& spec);*/
-	Time find_earliest_time_slot(EventSortedList< ScheduleEvent<Time>>& state,
+	//Time find_earliest_time_slot(EventSortedList< ScheduleEvent<Time>>& state,
+	Time find_earliest_time_slot(EventSortedList< Time>& state,
 		Time& parent_time,
 		Time& exec_time,
 		int required_worker_count,
-		WorkSpec& spec);
+		WorkSpec* spec);
 	/*Time find_min_start_time(map<string, vector< ScheduleEvent*>> resource_timeline,
 		vector< GraphNode*> inseparable_chain,
 		WorkSpec* spec,
@@ -44,13 +46,14 @@ private:
 		Time exec_time,
 		vector<Worker*> passed_workers);*/
 	void schedule_with_inseparables(GraphNode* node,
-		std::unordered_map< GraphNode*, ScheduledWork> node2swork,
-		std::vector< GraphNode*>& inseparable_chain,
-		WorkSpec& spec,
+		//std::unordered_map< GraphNode*, ScheduledWork> node2swork,
+		swork_dict_t node2swork,
+		std::vector< GraphNode>& inseparable_chain,
+		WorkSpec* spec,
 		std::vector<Worker>& worker_team,
-		Contractor& contractor,
+		const Contractor* contractor,
 		Time start_time,
-		std::map< GraphNode*, pair<Time, Time>>& exec_times);
+		std::unordered_map< GraphNode, pair<Time, Time>>& exec_times);
 
 public:
 	WorkerContractorPool worker_pool;
@@ -58,35 +61,44 @@ public:
 	ZoneTimeline zone_timeline;
 
 	MomentumTimeline(WorkerContractorPool worker_pool, LandscapeConfiguration landscape);
-	Time apply_time_spec(Time time, Time assigned_start_time);
-	tuple<Time, Time, map<GraphNode*, pair<Time, Time>>>& find_min_start_time_with_additional(GraphNode* node,
+	Time apply_time_spec(const Time& time, Time& assigned_start_time);
+	tuple<Time, Time, unordered_map<GraphNode, pair<Time, Time>>> find_min_start_time_with_additional(GraphNode* node,
 		vector< Worker>& worker_team,
-		map< GraphNode*, ScheduledWork>& node2swork,
-		WorkSpec& spec,
+		//unordered_map< GraphNode*, ScheduledWork>& node2swork,
+		swork_dict_t node2swork,
+		WorkSpec* spec,
 		Time& assigned_start_time,
 		Time& assigned_parent_time,
-		DefaultWorkEstimator work_estimator);
+		DefaultWorkEstimator* work_estimator);
 
 	bool can_schedule_at_the_moment(GraphNode* node,
 		vector< Worker>& worker_team,
-		WorkSpec& spec,
-		map< GraphNode, ScheduledWork>& node2swork,
+		WorkSpec* spec,
+		//map< GraphNode, ScheduledWork>& node2swork,
+		swork_dict_t node2swork,
 		Time& start_time,
 		Time& exec_time);
 	void update_timeline(Time& finish_time, Time& exec_time, GraphNode* node, vector<Worker>& worker_team, WorkSpec* spec);
 	Time schedule(GraphNode* node,
-		map< GraphNode*, ScheduledWork> node2swork,
+		//map< GraphNode*, ScheduledWork> node2swork,
+		swork_dict_t node2swork,
 		vector< Worker>& workers,
-		Contractor contractor,
-		WorkSpec& spec,
+		Contractor* contractor,
+		WorkSpec* spec,
 		Time& assigned_start_time,
 		Time& assigned_time,
 		Time assigned_parent_time = Time::Time(0),
 		//WorkTimeEstimator work_estimator = DefaultWorkEstimator());
 		DefaultWorkEstimator* work_estimator);
-	Time& find_min_start_time(map<string, vector< ScheduleEvent<Time>>>& resource_timeline,
+	/*Time& find_min_start_time(map<string, vector< ScheduleEvent<Time>>>& resource_timeline,
 		vector< GraphNode*>& inseparable_chain,
 		WorkSpec& spec,
+		Time& parent_time,
+		Time& exec_time,
+		vector<Worker>& passed_workers);*/
+	Time find_min_start_time(unordered_map<string, EventSortedList<Time>>& resource_timeline,
+		vector< GraphNode>& inseparable_chain,
+		WorkSpec* spec,
 		Time& parent_time,
 		Time& exec_time,
 		vector<Worker>& passed_workers);

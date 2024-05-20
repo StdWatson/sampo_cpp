@@ -32,6 +32,7 @@ public:
 	std::vector<std::pair<Time, int>> material_delivery_list = {};
 //public:
 
+	SupplyTimeline();
 	SupplyTimeline(LandscapeConfiguration landscape_config);
 //private:
 //	string _find_best_supply(string material, int count, Time deadline);

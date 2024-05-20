@@ -126,8 +126,8 @@ public:
         return inseparable_parent() != nullptr;
     }
 
-    std::vector<const GraphNode*> getInseparableChainWithSelf() const {
-        std::vector<const GraphNode*> chain;
+    std::vector<GraphNode> getInseparableChainWithSelf() const {
+        std::vector<GraphNode> chain;
         chain.push_back(this);
         auto* child = inseparable_son();
         if (child) {

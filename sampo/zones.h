@@ -69,7 +69,7 @@ struct ZoneConfiguration {
 //	//change_cost
 //};
 struct ZoneTransition {
-
+public:
 	ZoneTransition(string name,
 	int from_status,
 	int	to_status,

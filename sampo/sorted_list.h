@@ -22,9 +22,10 @@ public:
     Time time;
     int event_idx;
     T* obj;
+    int available_workers_count;
 
-    ScheduleEvent(EventType type, Time time, int event_idx, T* obj = nullptr)
-        : type(type), time(time), event_idx(event_idx), obj(obj) {}
+    ScheduleEvent(EventType type, Time time, int event_idx, T* obj = nullptr, available_workers_count)
+        : type(type), time(time), event_idx(event_idx), obj(obj), available_workers_count(available_workers_count) {}
 };
 
 struct event_cmp {

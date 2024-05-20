@@ -89,7 +89,7 @@ void SupplyTimeline::update_material_timeline_and_res_sources(std::vector<std::p
 	for (const auto& material : material_delivery_list) {
 		mat_sources[depot] -= material.second;
 		//int ind = timeline.max_size() / 2;
-		int ind = ind = timeline.bisect_key_left(time);
+		int ind = timeline.bisect_key_left(time);
 		const Time& timeline_time = timeline[ind].first;
 		int timeline_count = timeline[ind].second;
 		if (timeline_time == material.first) {

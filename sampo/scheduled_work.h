@@ -1,5 +1,5 @@
 #pragma once
-//sheduler/shemas/scheduled_work -
+//sheduler/schemas/scheduled_work -
 
 #include <string>
 #include <vector>
@@ -17,23 +17,33 @@ class ScheduledWork {
 public:
 	const WorkUnit* work_unit;
 	pair<Time, Time> start_end_time;
-	vector<Worker> workers;
+	vector<Worker>& workers;
 	const Contractor* contractor;
 	//string contractor;
 	vector<Equipment> equipments;
+	std::vector< ZoneTransition> zones_pre;
 	vector<MaterialDelivery> materials;
-	ConstructionObject object;
+	ConstructionObject* object;
 	int cost;
 
 	ScheduledWork();
 
+	/*ScheduledWork(const WorkUnit* work_unit,
+		pair<Time, Time> start_end_time,
+		vector<Worker>& workers,
+		const Contractor* contractor,
+		vector<Equipment> equipments = {},
+		std::vector< ZoneTransition> zones_pre = {},
+		vector<MaterialDelivery> materials = {},
+		ConstructionObject* object = nullptr);*/
 	ScheduledWork(const WorkUnit* work_unit,
 		pair<Time, Time> start_end_time,
-		vector<Worker> workers,
+		vector<Worker>& workers,
 		const Contractor* contractor,
-		vector<Equipment> equipments,
-		vector<MaterialDelivery> materials,
-		ConstructionObject object);
+		vector<Equipment> equipments = {},
+		std::vector< ZoneTransition> zones_pre = {},
+		vector<MaterialDelivery> materials = {},
+		ConstructionObject* object = nullptr);
 
 	Time duration() const;
 

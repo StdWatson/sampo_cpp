@@ -38,12 +38,12 @@ std::map<std::string, int> build_index_str_zone_int(vector<ZoneReq>& zones) {
 
 	return diction;
 }
-std::map<std::string, int> build_index_str_int(vector<Worker*> workers) {
-	std::map<std::string, int> diction;
+std::unordered_map<std::string, int> build_index_str_int(vector<Worker> workers) {
+	std::unordered_map<std::string, int> diction;
 	int i = 0;
 
 	for (auto item : workers) {
-		diction[item->get_name()] = item->get_count();
+		diction[item.get_name()] = item.get_count();
 	}
 
 	return diction;

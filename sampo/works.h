@@ -41,7 +41,7 @@ public:
     vector< EquipmentReq> equipment_reqs;
     vector< MaterialReq> material_reqs;
     vector< ConstructionObjectReq> object_reqs;
-    vector< ZoneReq> zone_reqs;
+    vector< ZoneReq*> zone_reqs;
     string group;
     float volume;
     bool is_service_unit;
@@ -54,7 +54,7 @@ public:
         float volume = 1, bool isServiceUnit = false) : worker_reqs(worker_reqs), volume(volume), isServiceUnit(isServiceUnit) {}*/
     /*explicit WorkUnit(const vector<WorkerReq>& worker_reqs = vector<WorkerReq*>(),
         float volume = 1, bool is_service_unit = false) : worker_reqs(worker_reqs), volume(volume), is_service_unit(is_service_unit) {}*/
-    explicit WorkUnit(vector<WorkerReq>& worker_reqs,
+    explicit WorkUnit(vector<WorkerReq> worker_reqs,
         float volume = 1, bool is_service_unit = false) : worker_reqs(worker_reqs), volume(volume), is_service_unit(is_service_unit), Identifiable(id, name) {}
     WorkUnit(string id,
             string name,

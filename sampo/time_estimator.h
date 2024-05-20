@@ -88,7 +88,7 @@ float communication_coefficient(int groups_count, int max_groups) {
 	return 1 / ((6 * m * m) * (-2 * n * n * n + 3 * n * n + (6 * m * m - 1) * n));
 }
 
-class DefaultWorkEstimator : virtual WorkTimeEstimator {
+class DefaultWorkEstimator : public WorkTimeEstimator {
 //public:
 private:
 	bool use_idle;
@@ -100,7 +100,7 @@ private:
 
 public:
 	DefaultWorkEstimator(bool use_idle = 1, int estimation_mode, string productivity_mode) : estimation_mode(estimation_mode),
-		productivity_mode(productivity_mode) {
+		productivity_mode(productivity_mode), WorkTimeEstimator(productivity_mode) {
 		estimation_mode = WorkEstimationMode::Realistic;
 		productivity_mode = WorkerProductivityMode.Static;
 	}
@@ -118,32 +118,32 @@ public:
 	float get_productivity_of_worker(Worker worker, int max_groups = 0, string productivity_mode = "Static") {
 		return worker.get_productivity(productivity_mode) * communication_coefficient(worker.count, max_groups);
 	}
-	Time estimate_time(WorkUnit& work_unit, std::vector< Worker>& worker_list) {
+	Time estimate_time(WorkUnit *work_unit, std::vector< Worker>& worker_list) {
 		if (worker_list.size() == 0)
 			return Time(0);
 		vector<Time> times = { Time(0) };
 		std::unordered_map<std::string, Worker> name2worker = build_index_str_wrk(worker_list);
 
-		for (auto req : work_unit.worker_reqs) {
+		for (auto req : work_unit->worker_reqs) {
 			int worker_count = 0;
 			//DefaultWorkEstimator def_est;
 
-			if (req.get_min_count() == 0)
+			if (req->get_min_count() == 0)
 				continue;
-			string name = req.get_kind();
+			string name = req->get_kind();
 			//Worker worker = name2worker[name];
 
 			if (name2worker.find(name) != name2worker.end()) {
 				Worker worker = name2worker[name];
 				worker_count = worker.count;
 
-				if (worker_count < req.get_min_count())
+				if (worker_count < req->get_min_count())
 					return Time::inf();
-				float productivity = this->get_productivity_of_worker(worker, req.get_max_count(), productivity_mode) / worker_count;
+				float productivity = this->get_productivity_of_worker(worker, req->get_max_count(), productivity_mode) / worker_count;
 
 				if (productivity == 0)
 					return Time::inf();
-				times.push_back(req.get_volume() / productivity);
+				times.push_back(req->get_volume() / productivity);
 			}
 			else {
 				cout << "Error no element: " << name << "in name2worker" << endl;
@@ -175,4 +175,4 @@ public:
 		return max(max_time, Time(0));
 	}
 
-};
+}

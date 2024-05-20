@@ -2,16 +2,25 @@
 
 #include "scheduled_work.h"
 
+//ScheduledWork::ScheduledWork(const WorkUnit* work_unit,
+//    pair<Time, Time> start_end_time,
+//    vector<Worker> workers,
+//    const Contractor* contractor,
+//    vector<Equipment> equipments = {},
+//    std::vector< ZoneTransition> zones_pre = {},
+//    vector<MaterialDelivery> materials = {},
+//    ConstructionObject* object = nullptr)
 ScheduledWork::ScheduledWork(const WorkUnit* work_unit,
     pair<Time, Time> start_end_time,
-    vector<Worker> workers,
+    vector<Worker>& workers,
     const Contractor* contractor,
-    vector<Equipment> equipments,
-    vector<MaterialDelivery> materials,
-    ConstructionObject object)
+    vector<Equipment> equipments = {},
+    std::vector< ZoneTransition> zones_pre = {},
+    vector<MaterialDelivery> materials = {},
+    ConstructionObject* object = nullptr)
     : work_unit(work_unit), start_end_time(std::move(start_end_time)),
-    workers(std::move(workers)), contractor(contractor), equipments(std::move(equipments)),
-    materials(std::move(materials)), object(std::move(object)) {
+    workers(workers), contractor(contractor), equipments(std::move(equipments)),
+    zones_pre(std::move(zones_pre)), materials(std::move(materials)), object(std::move(object)) {
 
     //if contractor is not None:
     //	if isinstance(contractor, str) :
@@ -30,7 +39,7 @@ ScheduledWork::ScheduledWork(const WorkUnit* work_unit,
         contractor->get_id
     }*/
 
-    cost = 0;
+    //cost = 0;
 
     // TODO
 //		for (auto& worker : workers) {

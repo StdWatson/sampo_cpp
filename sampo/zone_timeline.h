@@ -37,25 +37,27 @@ tuple<Time, int, int> event_cmp(const T) {
 class ZoneTimeline {
 private:
 	ZoneConfiguration config;
-	unordered_map<string, vector<ScheduleEvent<Time>>> timeline;
+	//unordered_map<string, vector<ScheduleEvent<Time>>> timeline;
+	unordered_map<string, EventSortedList<Time>> timeline;
 
 	bool match_status(int target, int match);
 	//bool is_inside_interval(vector< ScheduleEvent>& state, int idx);
-	bool is_inside_interval(EventSortedList< ScheduleEvent<Time>>& state, int idx);
-	int validate(Time& start_time, Time& exec_time, vector<ScheduleEvent<Time>>& state, int required_status);
-	Time& find_earliest_time_slot(vector< ScheduleEvent<Time>>& state, Time& parent_time, Time& exec_time, int required_status);
+	bool is_inside_interval(EventSortedList<Time>& state, std::set<ScheduleEvent<Time>>::const_iterator idx);
+	int validate(Time& start_time, Time& exec_time, EventSortedList<Time>& state, int required_status);
+	Time& find_earliest_time_slot(EventSortedList<Time>& state, Time& parent_time, Time& exec_time, int required_status);
 public:
+	ZoneTimeline();
 	ZoneTimeline(ZoneConfiguration config);
 //private:
 //	bool match_status(int target, int match);
 //	bool is_inside_interval(vector< ScheduleEvent*> state, int idx);
 //	int validate(Time start_time, Time exec_time, vector<ScheduleEvent*> state, int required_status);
 //public:
-	Time& find_min_start_time(vector< ZoneReq>& zones, Time& parent_time, Time& exec_time);
+	Time& find_min_start_time(vector< ZoneReq*> zones, Time& parent_time, Time& exec_time);
 //private:
 //	Time _find_earliest_time_slot(vector< ScheduleEvent*> state, Time parent_time, Time exec_time, int required_status);
 //public:
-	bool can_schedule_at_the_moment(vector< ZoneReq>& zones, Time& start_time, Time& exec_time);
+	bool can_schedule_at_the_moment(vector< ZoneReq*> zones, Time& start_time, Time& exec_time);
 	vector< ZoneTransition>& update_timeline(int index, vector< Zone>& zones, Time& start_time, Time& exec_time);
 
 	ZoneTimeline operator=(const ZoneTimeline& el) const {
